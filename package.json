@@ -1,0 +1,31 @@
+{
+  "name": "viral",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.401.0",
+    "bcrypt": "^3.0.4",
+    "bcrypto": "^3.0.2",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.4",
+    "google-auth-library": "^3.1.0",
+    "jsonwebtoken": "^8.4.0",
+    "morgan": "^1.9.1",
+    "pg": "^7.8.0",
+    "request": "^2.88.0",
+    "sequelize": "^4.42.0",
+    "textlocal": "^0.1.1",
+    "uuid": "^3.3.2",
+    "voucher-code-generator": "^1.1.1",
+    "winston": "^3.2.1"
+  }
+}
