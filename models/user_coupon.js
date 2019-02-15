@@ -2,34 +2,31 @@ var Sequelize = require('sequelize');
 var db = require('../config/db');
 var uuid = require('uuid/v4');
 
+// create a sequelize instance with our local postgres database information.
 var sequelize = new Sequelize(db.url);
+const table = 'user_coupon';
 
-var table = 'coupon';
 // setup User model and its fields.
-var Coupon = sequelize.define(table, {
+var User_coupon = sequelize.define(table, {
     id: {
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
         defaultValue: Sequelize.UUIDV4
     },
-    code: {
+    user_id:   {
         type: Sequelize.STRING,
         allowNull: false
     },
-    coupon_value: {
-        type: Sequelize.STRING,
+    coupon_id: {
+        type: Sequelize.UUID,
+        unique: true,
         allowNull: false
     },
-    coupon_message: {
+    referrer_id:   {
         type: Sequelize.STRING,
-        allowNull: false
-    },
-    status: {
-        type: Sequelize.ENUM,
-        values: ['active', 'expired'],
-        defaultValue: 'active',
-        allowNull: false
+        allowNull: true,
+        defaultValue: null
     }}, {
     hooks: {
     },
@@ -39,5 +36,5 @@ sequelize.sync()
     .then(() => console.log(`Table ${table} is created if one doesn't exist`))
     .catch(error => console.log('This error occured', error));
 
-module.exports = Coupon;
-
+// export User model for use in other files.;
+module.exports = User_coupon;

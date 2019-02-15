@@ -53,7 +53,7 @@ module.exports = function(app)  {
         else if (!user.validPassword(password)) {
             res.status(401).send({ status: 'failure', message: 'Invalid Username or password'});
         } else {
-            const j = getJwt({ useruuid: user.username});
+            const j = getJwt({ role: 'user', useruuid: user.username});
             prepareJWTCookies(j, res);
             res.status(200).send({ status: 'success', message: 'Successfull Authentication'});
         }
@@ -67,7 +67,7 @@ module.exports = function(app)  {
                     if(!user)   {
                         res.status(412).send({ status: 'failure', message: 'Invalid referral id'});
                     }   else    {        
-                        prepareJWTCookies(getJwt({ referrer: user.username, referral_token: user.referral_token }, 1*365*24*60*60), res, 1*365*24*60*60*1000);
+                        prepareJWTCookies(getJwt({ role: 'signup', referrer: user.username, referral_token: user.referral_token }, 1*365*24*60*60), res, 1*365*24*60*60*1000);
                         res.status(200).send({ status: 'success', message: 'sign up as with referral id' }) 
                     }
                 }
@@ -91,15 +91,16 @@ module.exports = function(app)  {
         const otp = getReferralCode();
         logger.info(`OTP for phone verification at signup: ${otp} <----> ${user.phone_no}`);
         if(!req.err && req.decoded.referrer && req.decoded.referral_token)    {
-            prepareJWTCookies(getJwt({ user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}), res, 10*60*1000);
+            prepareJWTCookies(getJwt({ role: 'verify_user', 
+            user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}), res, 10*60*1000);
         }   else    {
             if(req.err.code == 103) {
-                prepareJWTCookies(getJwt({ user: encrypt(JSON.stringify(user)) }, 10*60), res);
+                prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)) }, 10*60), res);
             }   else if(req.decoded.referrer && req.decoded.referral_token)    {
-                prepareJWTCookies(getJwt({ user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}), res, 10*60*1000);
+                prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}), res, 10*60*1000);
             }
         }
-        sendSMS(`${otp} is your one time password for Sign up in viral`, 'VIRAL', req.body.phone_no);
+        sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
         otps.set(otp, { created_at: Date.now, to: user.phone_no });
         res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
 
@@ -202,7 +203,7 @@ module.exports = function(app)  {
                     password: user.password,
                 })
                 .then(usr => {
-                    const j = getJwt({ useruuid: usr.username });
+                    const j = getJwt({ role: 'user', useruuid: usr.username });
                     prepareJWTCookies(j, res);
                     resolve(usr);
                 })
@@ -219,9 +220,9 @@ module.exports = function(app)  {
         User.findOne({ where: { username: req.body.username }}).then(
             user => {
                 if(user)    {
-                    prepareJWTCookies(getJwt({ user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60), res, 10*60*1000);
+                    prepareJWTCookies(getJwt({ role: 'password_reset', user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60), res, 10*60*1000);
                     let otp = getReferralCode();
-                    sendSMS(`${otp} is your one time password for Sign up in viral`, 'VIRAL', req.body.phone_no);
+                    sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
                     otps.set(otp, { created_at: Date.now, to: user.phone_no });
                     logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);
                     res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});

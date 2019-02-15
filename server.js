@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var db = require('./config/db');
 
-
 const port = process.env.PORT || 8080;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,7 +15,9 @@ app.use(morgan('dev', { stream: logger.stream }));
 app.use(cookieParser());
 app.set('port', 8080);
 var router = require('./routes/app_routes')(app);
+var admin_router = require('./routes/admin_route')(app);
 app.use('/', router);
+app.use('/admin', admin_router);
 
 
 server = app.listen(port, () => {

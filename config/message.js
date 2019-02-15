@@ -1,1 +1,2 @@
-module.exports =  apikey = '';
+module.exports.apikey = '';
+module.exports.sender = 'TXTLCL'
