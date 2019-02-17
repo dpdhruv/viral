@@ -67,7 +67,7 @@ module.exports = function(app)  {
                     if(!user)   {
                         res.status(412).send({ status: 'failure', message: 'Invalid referral id'});
                     }   else    {        
-                        prepareJWTCookies(getJwt({ role: 'signup', referrer: user.username, referral_token: user.referral_token }, 1*365*24*60*60), res, 1*365*24*60*60*1000);
+                        prepareJWTCookies(getJwt({ role: 'signup', referrer: user.username, referral_token: user.referral_token }, 1*365*24*60*60*1000), res, 1*365*24*60*60*1000);
                         res.status(200).send({ status: 'success', message: 'sign up as with referral id' }) 
                     }
                 }
@@ -92,12 +92,12 @@ module.exports = function(app)  {
         logger.info(`OTP for phone verification at signup: ${otp} <----> ${user.phone_no}`);
         if(!req.err && req.decoded.referrer && req.decoded.referral_token)    {
             prepareJWTCookies(getJwt({ role: 'verify_user', 
-            user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}), res, 10*60*1000);
+            user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}, 10*60), res, 10*60*1000);
         }   else    {
             if(req.err.code == 103) {
-                prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)) }, 10*60), res);
+                prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)) }, 10*60*1000), res, 10*60*1000);
             }   else if(req.decoded.referrer && req.decoded.referral_token)    {
-                prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}), res, 10*60*1000);
+                prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}, 10*60*1000), res, 10*60*1000);
             }
         }
         sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
@@ -121,6 +121,7 @@ module.exports = function(app)  {
             switch(req.params.action)   {
                 case 'signup':
                     decoded = req.decoded;
+                    console.log(decoded);
                     user = JSON.parse(decrypt(decoded.user));
                     if(user.phone_no != otp_map.to) {
                         res.status(400).send({ status: 'Failure', message: 'Otp doesn\' match with corresponding number'});
@@ -220,7 +221,7 @@ module.exports = function(app)  {
         User.findOne({ where: { username: req.body.username }}).then(
             user => {
                 if(user)    {
-                    prepareJWTCookies(getJwt({ role: 'password_reset', user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60), res, 10*60*1000);
+                    prepareJWTCookies(getJwt({ role: 'password_reset', user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
                     let otp = getReferralCode();
                     sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
                     otps.set(otp, { created_at: Date.now, to: user.phone_no });

@@ -16,8 +16,10 @@ app.use(cookieParser());
 app.set('port', 8080);
 var router = require('./routes/app_routes')(app);
 var admin_router = require('./routes/admin_route')(app);
+var shop_router = require('./routes/shop_route')(app);
 app.use('/', router);
 app.use('/admin', admin_router);
+app.use('/shop', shop_router);
 
 
 server = app.listen(port, () => {

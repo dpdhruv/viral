@@ -4,31 +4,23 @@ var uuid = require('uuid/v4');
 
 var sequelize = new Sequelize(db.url);
 
-var table = 'coupon';
+var table = 'rewards';
 // setup User model and its fields.
-var Coupon = sequelize.define(table, {
-    id: {
-        type: Sequelize.UUID,
-        primaryKey: true,
+var Reward = sequelize.define(table, {
+    campaign_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: Sequelize.UUIDV4
     },
-    code: {
-        type: Sequelize.STRING,
+    reward_id: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
-    coupon_value: {
-        type: Sequelize.STRING,
+    threshold: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
-    coupon_message: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    status: {
-        type: Sequelize.ENUM,
-        values: ['active', 'expired'],
-        defaultValue: 'active',
+    coupon:{
+        type: Sequelize.UUID,
         allowNull: false
     }}, {
     hooks: {
@@ -39,5 +31,5 @@ sequelize.sync()
     .then(() => console.log(`Table ${table} is created if one doesn't exist`))
     .catch(error => console.log('This error occured', error));
 
-module.exports = Coupon;
+module.exports = Reward;
 

@@ -17,6 +17,8 @@ module.exports.getJwt = function(payload, time)   {
     payload.iat = now;
     if(time)    {
         jwt_config.header.expiresIn = time;
+    } else  {
+        jwt_config.header.expiresIn = jwt_config.expiry
     }
     return jwt.sign(payload, key, jwt_config.header);
 }
