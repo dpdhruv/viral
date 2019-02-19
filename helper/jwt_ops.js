@@ -34,7 +34,7 @@ module.exports.jwtChecker = function (req, res, next)   {
         if(err) {
             res.clearCookie('access-token-1');
             res.clearCookie('access-token-2');
-            req.err = { status: 'failure', code: 100, message: 'verification failed' }
+            req.err = { status: 'failure', code: 100, message: 'jwt verification failed' }
         }
         else    {
             if(Date.now() >= decoded.exp)   {
@@ -50,3 +50,22 @@ module.exports.jwtChecker = function (req, res, next)   {
     })
     next();
 };
+
+module.exports.validJWT = function(jwt)   {
+    return true;
+    if(!jwt.role)   {
+        return false;
+    }
+    switch(jwt.role)  {
+        case 'user':
+            break;
+        case 'signup_referral':
+            break;
+        case 'verify_new_user':
+            break;
+        case 'verify_referral_user':
+            break;
+        case 'password_reset':
+            break;
+    }
+}

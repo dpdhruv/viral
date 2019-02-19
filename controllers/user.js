@@ -9,10 +9,6 @@ var Reward = require('../models/reward');
 
 async function createUserWithReferral(req, res, user, referral) {
     return await new Promise(async (resolve) => {
-        if(!referral.referrer || !referral.referral_token)    {
-            resolve({ code: 401, body: { status: 'failure', message: 'Invalid JWT Received'}});
-            return;
-        }
         let usr = await createUser(req, res, user);
         if(!usr)    {
             resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the server'}});

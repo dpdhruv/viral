@@ -16,7 +16,7 @@ module.exports.check_user_details = async (user) => {
         message += 'Invalid Email\n'
     }
     if(!isValidName(user.name)) {
-        name += 'Invalid name\n';
+        message += 'Invalid name\n';
     }
     if(message == '')   {
         message = await verify_duplication(user);
@@ -72,3 +72,6 @@ function isValidName(name) {
     let regexp = new RegExp(pattern);
     return regexp.test(name);
 }
+
+
+module.exports.isValidPassword = isValidPassword;
