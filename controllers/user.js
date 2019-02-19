@@ -1,0 +1,74 @@
+const { getJwt, prepareJWTCookies } = require('../helper/jwt_ops');
+const { sendSMS } = require('../helper/message');
+const User = require('../models/user');
+var Referral = require('../models/referral');
+var logger = require('../config/winston');
+var Coupon = require('../models/coupon');
+var User_coupon = require('../models/user_coupon');
+var Reward = require('../models/reward');
+
+async function createUserWithReferral(req, res, user, referral) {
+    return await new Promise(async (resolve) => {
+        if(!referral.referrer || !referral.referral_token)    {
+            resolve({ code: 401, body: { status: 'failure', message: 'Invalid JWT Received'}});
+            return;
+        }
+        let usr = await createUser(req, res, user);
+        if(!usr)    {
+            resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the server'}});
+        }
+        else    {
+            Referral.create({
+                user_id: referral.referrer,
+                referral_id: referral.referral_token,
+                referred_to: usr.username
+            }).then(async referrel => {
+                logger.info(`New Referral entry: ${referral.referrer} ---> ${usr.username}`);
+                referrer = await User.findOne({ where: { username: referrel.user_id }});
+                sendSMS(`${usr.name} has just signed up`, referrer.dataValues.phone_no);
+                let coupons_got = await User_coupon.count({ where: { user_id: referrer.dataValues.username }});
+                if(coupons_got < 12)    {
+                    let reward = await Reward.findOne({ where: { campaign_id: 1, reward_id: 1}});
+                    let coupon = await Coupon.create({ code: reward.dataValues.coupon_code, coupon_value: reward.dataValues.coupon_value, coupon_message: reward.dataValues.coupon_message })
+                    logger.info(`New coupon given to ${referrer.dataValues.username}`);
+                    sendSMS('You have got a coupon.', referrer.dataValues.phone_no);
+                    User_coupon.create({
+                        user_id: referrer.dataValues.username,
+                        referrer_id: usr.username,
+                        coupon_id: coupon.dataValues.id
+                    })
+                    referrer.update({ referral_status: 'expired'});
+                }
+                resolve({ code: 200, body: { status: 'success', message: 'New User Created with referrel'}});
+            }).catch(err => {
+                logger.error(err);
+                resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the Server'}});
+            });
+        }
+    })
+}
+
+async function createUser(req, res, user)   {
+    return await new Promise((resolve) => {
+        User.create({
+            username: user.username,
+            phone_no: user.phone_no,
+            name: user.name,
+            password: user.password,
+        }).then(usr => {
+            const j = getJwt({ role: 'user', useruuid: usr.username });
+            prepareJWTCookies(j, res);
+            logger.info(`New User created: ${user}`);
+            sendSMS('Thank you for Signing up', usr.phone_no);
+            resolve(usr);
+        })
+        .catch(error => {                    
+            logger.error(`${error}`);
+            resolve();
+        });
+    })
+}
+
+
+module.exports.createUser = createUser;
+module.exports.createUserWithReferral = createUserWithReferral;

@@ -19,9 +19,20 @@ var Reward = sequelize.define(table, {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    coupon:{
-        type: Sequelize.UUID,
+    coupon_code:{
+        type: Sequelize.STRING,
         allowNull: false
+    },
+    coupon_value:   {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    coupon_message: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    image_url:  {
+        type: Sequelize.STRING
     }}, {
     hooks: {
     },

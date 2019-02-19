@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^2.1.0",
     "aws-sdk": "^2.401.0",
     "bcrypt": "^3.0.4",
     "bcrypto": "^3.0.2",
@@ -26,6 +27,7 @@
     "textlocal": "^0.1.1",
     "uuid": "^3.3.2",
     "voucher-code-generator": "^1.1.1",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.7.0"
   }
 }

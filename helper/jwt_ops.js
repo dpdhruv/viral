@@ -1,5 +1,5 @@
-const key = require('./config/crypto');
-var jwt_config = require('./config/jwt');
+const key = require('../config/crypto');
+var jwt_config = require('../config/jwt');
 const jwt = require('jsonwebtoken');
 
 module.exports.prepareJWTCookies = function (jwt, res, maxAge)  {

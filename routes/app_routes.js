@@ -1,16 +1,13 @@
 var router = require('express').Router();
 var path = require('path');
 var logger = require('../config/winston');
-const cookie = require('cookie-parser');
-var User = require('../models/user');
-var Referral = require('../models/referral');
-var Coupon = require('../models/coupon');
-var Offer = require('../models/offer');
-var { sendSMS } = require('../message');
-const key = require('../config/crypto');
-const { getJwt, prepareJWTCookies, jwtChecker } = require('../jwt_ops');
+var { sendSMS } = require('../helper/message');
+const { getJwt, prepareJWTCookies, jwtChecker } = require('../helper/jwt_ops');
 var voucher_codes = require('voucher-code-generator');
-var { encrypt, decrypt } = require('../crypt');
+var { encrypt, decrypt } = require('../helper/crypt');
+var { createUser, createUserWithReferral } = require('../controllers/user');
+var { check_user_details } = require('../helper/user');
+var User = require('../models/user');
 
 let otps = new Map();
 let referrel_code = [];
@@ -43,10 +40,10 @@ module.exports = function(app)  {
         }       
     });
 
-    router.post('/login', (req, res) => {
+    router.post('/login', async (req, res) => {
         var username = req.body.username,
         password = req.body.password;
-        User.findOne({ where: { username: username } }).then(function (user) {
+        User.findOne({ where: { username: username }}).then(function (user) {
         if (!user) {
             res.status(401).send({ status: 'failure', message: 'Invalid Username or password'});
         }
@@ -88,22 +85,23 @@ module.exports = function(app)  {
             name: req.body.name,
             phone_no: req.body.phone_no
         }
+        let message = await check_user_details(user);
+        if(message) {
+            res.status(406).send({ status: 'failure', message: message} );
+            return;
+        }
         const otp = getReferralCode();
         logger.info(`OTP for phone verification at signup: ${otp} <----> ${user.phone_no}`);
         if(!req.err && req.decoded.referrer && req.decoded.referral_token)    {
-            prepareJWTCookies(getJwt({ role: 'verify_user', 
-            user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}, 10*60), res, 10*60*1000);
-        }   else    {
-            if(req.err.code == 103) {
+            prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}, 10*60), res, 10*60*1000);
+        }   else if(req.err.code == 103)   {
                 prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)) }, 10*60*1000), res, 10*60*1000);
-            }   else if(req.decoded.referrer && req.decoded.referral_token)    {
+        }   else if(req.decoded.referrer && req.decoded.referral_token)    {
                 prepareJWTCookies(getJwt({ role: 'verify_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}, 10*60*1000), res, 10*60*1000);
-            }
         }
         sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
         otps.set(otp, { created_at: Date.now, to: user.phone_no });
         res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
-
     });
 
     router.post('/verification/sms/:action', jwtChecker,async (req, res) => {
@@ -129,13 +127,13 @@ module.exports = function(app)  {
                     }
                     let referral = decoded.referrel;
                     if(!referral)    {
-                        if(!await createUser(user))    {
+                        if(!await createUser(req, res, user))    {
                             res.status(500).send({ status: 'failure', message: 'Something went wrong on the server'});
                         }   else    {
                             res.status(200).send({ status: 'success', message: 'New User created'});
                         }
                     }   else    {
-                        const response = await createUserWithReferral(user, referral);
+                        const response = await createUserWithReferral(req, res, user, referral);
                         res.status(response.code).send(response.body);                
                     }
                     break
@@ -150,6 +148,8 @@ module.exports = function(app)  {
                         usr => {
                             usr.update({ password: req.body.password }).then(
                                 ur => {
+                                    sendSMS(`You just reset your password`, ur.phone_no);
+                                    logger.info(`${ur.username}  changed password`);
                                     res.status(200).send({ status: 'success', message: 'Password Reset Successful'});
                                 }
                             ).catch(err => {
@@ -166,72 +166,22 @@ module.exports = function(app)  {
                     res.status(400).send({ status: 'failure', message: 'Invalid action provided'});
             }
         }
-        
-        
-        async function createUserWithReferral(user, referral) {
-            return await new Promise(async (resolve) => {
-                if(!referral.referrer || !referral.referral_token)    {
-                    resolve({ code: 401, body: { status: 'failure', message: 'Invalid JWT Received'}});
-                    return;
-                }
-                let usr = await createUser(user);
-                if(!usr)    {
-                    resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the server'}});
-                }
-                else    {
-                    Referral.create({
-                        user_id: referral.referrer,
-                        referral_id: referral.referral_token,
-                        referred_to: usr.username
-                    }).then(referrel => {
-                        logger.info(`New Referral entry: ${referrel}`);
-                        resolve({ code: 200, body: { status: 'success', message: 'New User Created with referrel'}});
-                    }).catch(err => {
-                        logger.error(err);
-                        resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the Server'}});
-                    });
-                }
-            })
-        }
-        
-
-        async function createUser(user)   {
-            return await new Promise((resolve) => {
-                User.create({
-                    username: user.username,
-                    phone_no: user.phone_no,
-                    name: user.name,
-                    password: user.password,
-                })
-                .then(usr => {
-                    const j = getJwt({ role: 'user', useruuid: usr.username });
-                    prepareJWTCookies(j, res);
-                    resolve(usr);
-                })
-                .catch(error => {
-                    console.error(error);
-                    resolve();
-                });
-            })
-        }
     });
 
 
     router.post('/resetpassword', (req, res) => {
-        User.findOne({ where: { username: req.body.username }}).then(
-            user => {
-                if(user)    {
-                    prepareJWTCookies(getJwt({ role: 'password_reset', user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
-                    let otp = getReferralCode();
-                    sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
-                    otps.set(otp, { created_at: Date.now, to: user.phone_no });
-                    logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);
-                    res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
-                }   else{
-                    res.status.send({ status: 'failure', message: 'User doesn\'t exist'});
-                }
+        User.findOne({ where: { username: req.body.username }}).then((user) => {
+            if(user)    {
+                prepareJWTCookies(getJwt({ role: 'password_reset', user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
+                let otp = getReferralCode();
+                sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
+                otps.set(otp, { created_at: Date.now, to: user.phone_no });
+                logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);
+                res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
+            }   else{
+                res.status.send({ status: 'failure', message: 'User doesn\'t exist'});
             }
-        ).catch(err => {
+        }).catch(err => {
             logger.error(err.message);
             res.status(400).send({ status: 'failure', message: 'Something went wrong'});
         })

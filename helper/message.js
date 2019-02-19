@@ -1,5 +1,5 @@
 var request = require('request');
-var { apikey, sender } = require('./config/message');
+var { apikey, sender } = require('../config/message');
 
 module.exports.sendSMS = function() {}
 

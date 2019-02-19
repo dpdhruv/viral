@@ -1,11 +1,9 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
 var db = require('../config/db');
-var crypto = require('crypto');
 var voucher_codes = require('voucher-code-generator');
 
 var sequelize = new Sequelize(db.url);
-var key = process.env.KEY || 'secret';
 var table = 'users';
 
 let referrel_code = [];
