@@ -1,1 +1,1 @@
-module.exports.url = 'postgres://postgres:root@localhost:5432/test';
+module.exports.url = process.env.DB_URL || 'postgres://postgres:root@localhost:5432/test';
