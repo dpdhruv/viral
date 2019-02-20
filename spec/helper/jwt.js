@@ -1,4 +1,4 @@
-const { validJWT } = require('../../helper/jwt_ops');
+const { validJWT } = require('../../controllers/jwt');
 const jwt = require('jsonwebtoken');
 var key = require('../../config/crypto');
 
@@ -9,7 +9,7 @@ function setJWT(payload)    {
     return jwt.sign(payload, key);
 }
 
-function getJWT(res)    {
+module.exports.getJWT = function (role, res)    {
     return new Promise((resolve, reject) => {
         let cookies = res.headers["set-cookie"];
         if(!cookies)  {
@@ -28,11 +28,12 @@ function getJWT(res)    {
             }
             if(count == 2)  { 
                 jwt.verify(first + '.' + second, key, (err, decoded) => {
-                
                     if(err)   {
                         reject('Invalid JWT received');
                     }   
-                    if(!validJWT()) reject('Invalid JWT fields');
+                    if(!validJWT(role, decoded)) {
+                        reject('Invalid JWT fields');
+                    }
                     resolve(decoded);
                 })
             }
@@ -40,5 +41,3 @@ function getJWT(res)    {
         reject('No JWT found');
     })
 }
-
-module.exports.getJWT = getJWT;

@@ -3,7 +3,8 @@ const server = 'http://localhost';
 const port = 8080;
 const { getJWT } = require('./helper/jwt');
 const { decrypt } = require('../helper/crypt');
-let referral_code = 'wy42yaw';
+const roles = require('../config/roles');
+let referral_code = 'lmiiXUD';
 
 
 describe('Sign up suite', () => {
@@ -20,7 +21,7 @@ describe('Sign up suite', () => {
                 expect(response.statusCode).toBe(200);
                 expect(JSON.parse(body)).toEqual({ status: 'success', message: 'otp has been sent for verification'});
                 try {
-                    let jwt = await getJWT(response);
+                    let jwt = await getJWT(roles.VERIFY_NEW_USER, response);
                     expect({ role: jwt.role, user: JSON.parse(decrypt(jwt.user)) }).toEqual({ role: 'verify_new_user', user: user});
                 }   catch(err)  {
                     fail(err);
@@ -62,11 +63,16 @@ describe('Sign up suite', () => {
         });
     })
 
-    it('send referrel link', async () => {
+    it('send valid referrel code', async () => {
         await new Promise((resolve) => {
-            request.get(`${server}:${port}/signup?referral_id=${referral_code}`, (error, response, body) => {
+            request.get(`${server}:${port}/signup?referral_id=${referral_code}`,async  (error, response, body) => {
                 expect(response.statusCode).toBe(200);
                 expect(JSON.parse(body)).toEqual({ status: 'success', message: `sign up as with referral id`});
+                try {
+                    await getJWT(roles.SIGNUP_REFERRAL, response);
+                }   catch(err)  {
+                    fail(err);
+                }
                 resolve();
             });
         });

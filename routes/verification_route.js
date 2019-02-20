@@ -1,5 +1,5 @@
 var router = require('express').Router();
-const { getJwt, prepareJWTCookies, jwtChecker, validJWT } = require('../helper/jwt_ops');
+const { getJwt, prepareJWTCookies, jwtChecker } = require('../helper/jwt_ops');
 var { signup, resetpassword } = require('../helper/action');
 var { otps, getReferralCode } = require('../models/otp_pool.js');
 

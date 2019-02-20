@@ -1,6 +1,7 @@
 const request = require('request');
 const server = 'http://localhost';
 const port = 8080;
+const roles = require('../config/roles');
 const { getJWT } = require('./helper/jwt');
 
 
@@ -13,7 +14,7 @@ describe('Login suite', () => {
                 expect(response.statusCode).toBe(200);
                 expect(JSON.parse(body)).toEqual({ status: 'success', message: 'Successful Authentication'});
                 try {
-                    let jwt = await getJWT(response);
+                    let jwt = await getJWT(roles.USER, response);
                     expect(jwt.useruuid).toBe('parth9218');
                 }   catch(err)  {
                     fail(err);

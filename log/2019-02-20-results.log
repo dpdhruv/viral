@@ -777,3 +777,354 @@ notNull Violation: referral.referral_id cannot be null
 
 2019-02-20 03:22:33 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.138 ms - 52[0m
 
+2019-02-20 11:46:21 info: [0mPOST /login [32m200 [0m226.790 ms - 58[0m
+
+2019-02-20 11:46:22 info: [0mPOST /login [33m401 [0m139.878 ms - 61[0m
+
+2019-02-20 11:47:00 info: [0mPOST /login [32m200 [0m151.444 ms - 58[0m
+
+2019-02-20 11:47:00 info: [0mPOST /login [33m401 [0m135.443 ms - 61[0m
+
+2019-02-20 11:50:02 info: [0mPOST /login [32m200 [0m155.363 ms - 58[0m
+
+2019-02-20 11:50:02 info: [0mPOST /login [33m401 [0m139.278 ms - 61[0m
+
+2019-02-20 11:51:03 info: [0mPOST /login [32m200 [0m144.639 ms - 58[0m
+
+2019-02-20 11:51:03 info: [0mPOST /login [33m401 [0m135.072 ms - 61[0m
+
+2019-02-20 11:51:42 info: [0mPOST /login [32m200 [0m151.091 ms - 58[0m
+
+2019-02-20 11:51:42 info: [0mPOST /login [33m401 [0m139.922 ms - 61[0m
+
+2019-02-20 11:52:13 info: [0mPOST /login [32m200 [0m146.296 ms - 58[0m
+
+2019-02-20 11:52:13 info: [0mPOST /login [33m401 [0m135.967 ms - 61[0m
+
+2019-02-20 11:52:18 info: [0mPOST /signup [33m406 [0m6.365 ms - 67[0m
+
+2019-02-20 11:52:18 info: [0mPOST /signup [33m406 [0m0.442 ms - 105[0m
+
+2019-02-20 11:52:18 info: [0mGET /signup?referral_id=wy42yaw [32m200 [0m33.352 ms - 60[0m
+
+2019-02-20 11:52:18 info: [0mGET /signup?referral_id=234wef [33m412 [0m4.506 ms - 52[0m
+
+2019-02-20 11:52:18 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:25:01 info: [0mPOST /login [32m200 [0m143.790 ms - 58[0m
+
+2019-02-20 12:25:01 info: [0mPOST /login [33m401 [0m135.880 ms - 61[0m
+
+2019-02-20 12:25:03 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:27:48 info: [0mPOST /login [32m200 [0m190.811 ms - 58[0m
+
+2019-02-20 12:27:48 info: [0mPOST /login [33m401 [0m149.065 ms - 61[0m
+
+2019-02-20 12:27:53 info: [0mPOST /signup [33m406 [0m3.967 ms - 67[0m
+
+2019-02-20 12:27:54 info: [0mPOST /signup [33m406 [0m0.399 ms - 105[0m
+
+2019-02-20 12:27:54 info: [0mGET /signup?referral_id=wy42yaw [32m200 [0m6.410 ms - 60[0m
+
+2019-02-20 12:27:54 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.291 ms - 52[0m
+
+2019-02-20 12:27:54 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:28:17 info: [0mPOST /login [32m200 [0m150.213 ms - 58[0m
+
+2019-02-20 12:28:17 info: [0mPOST /login [33m401 [0m147.295 ms - 61[0m
+
+2019-02-20 12:28:20 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:30:27 info: [0mPOST /login [32m200 [0m144.697 ms - 58[0m
+
+2019-02-20 12:30:27 info: [0mPOST /login [33m401 [0m150.998 ms - 61[0m
+
+2019-02-20 12:30:29 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:30:50 info: [0mPOST /login [32m200 [0m159.866 ms - 58[0m
+
+2019-02-20 12:30:51 info: [0mPOST /login [33m401 [0m140.359 ms - 61[0m
+
+2019-02-20 12:30:53 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:31:36 info: [0mPOST /login [32m200 [0m175.753 ms - 58[0m
+
+2019-02-20 12:31:36 info: [0mPOST /login [33m401 [0m140.370 ms - 61[0m
+
+2019-02-20 12:31:39 info: [0mPOST /signup [0m- [0m- ms - -[0m
+
+2019-02-20 12:33:00 info: [0mPOST /signup?referral_id=wy42yaw [33m406 [0m17.207 ms - 67[0m
+
+2019-02-20 12:34:43 info: OTP for phone verification at signup: 023722 <----> 1234567890
+2019-02-20 12:34:43 info: [0mPOST /signup?referral_id=wy42yaw [32m200 [0m56.047 ms - 67[0m
+
+2019-02-20 12:34:49 info: [0mPOST /login [32m200 [0m158.524 ms - 58[0m
+
+2019-02-20 12:34:50 info: [0mPOST /login [33m401 [0m149.695 ms - 61[0m
+
+2019-02-20 12:34:50 info: OTP for phone verification at signup: 083052 <----> 7938238195
+2019-02-20 12:34:50 info: [0mPOST /signup [32m200 [0m11.117 ms - 67[0m
+
+2019-02-20 12:35:14 info: [0mPOST /login [32m200 [0m145.906 ms - 58[0m
+
+2019-02-20 12:35:14 info: [0mPOST /login [33m401 [0m136.167 ms - 61[0m
+
+2019-02-20 12:35:14 info: OTP for phone verification at signup: 025632 <----> 7938238195
+2019-02-20 12:35:14 info: [0mPOST /signup [32m200 [0m8.305 ms - 67[0m
+
+2019-02-20 12:35:14 info: [0mPOST /signup [33m406 [0m4.667 ms - 67[0m
+
+2019-02-20 12:35:14 info: [0mPOST /signup [33m406 [0m0.435 ms - 105[0m
+
+2019-02-20 12:35:14 info: [0mGET /signup?referral_id=wy42yaw [32m200 [0m7.169 ms - 60[0m
+
+2019-02-20 12:35:14 info: [0mGET /signup?referral_id=234wef [33m412 [0m4.349 ms - 52[0m
+
+2019-02-20 12:35:47 info: [0mPOST /login [32m200 [0m147.328 ms - 58[0m
+
+2019-02-20 12:35:47 info: [0mPOST /login [33m401 [0m137.042 ms - 61[0m
+
+2019-02-20 12:35:47 info: OTP for phone verification at signup: 004787 <----> 7938238195
+2019-02-20 12:35:47 info: [0mPOST /signup [32m200 [0m5.568 ms - 67[0m
+
+2019-02-20 12:35:47 info: [0mPOST /signup [33m406 [0m4.503 ms - 67[0m
+
+2019-02-20 12:35:47 info: [0mPOST /signup [33m406 [0m0.400 ms - 105[0m
+
+2019-02-20 12:35:47 info: [0mGET /signup?referral_id=wy42yaw [32m200 [0m4.922 ms - 60[0m
+
+2019-02-20 12:35:47 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.514 ms - 52[0m
+
+2019-02-20 12:38:57 info: [0mPOST /login [32m200 [0m172.541 ms - 58[0m
+
+2019-02-20 12:38:57 info: [0mPOST /login [33m401 [0m148.202 ms - 61[0m
+
+2019-02-20 12:38:57 info: OTP for phone verification at signup: 019538 <----> 7938238195
+2019-02-20 12:38:57 info: [0mPOST /signup [32m200 [0m4.455 ms - 67[0m
+
+2019-02-20 12:38:57 info: [0mPOST /signup [33m406 [0m3.754 ms - 67[0m
+
+2019-02-20 12:38:57 info: [0mPOST /signup [33m406 [0m0.387 ms - 105[0m
+
+2019-02-20 12:38:57 info: [0mGET /signup?referral_id=wy42yaw [32m200 [0m3.850 ms - 60[0m
+
+2019-02-20 12:38:57 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.112 ms - 52[0m
+
+2019-02-20 12:41:49 info: OTP for phone verification at signup: 043423 <----> 9409521572
+2019-02-20 12:41:49 info: [0mPOST /signup [32m200 [0m79.658 ms - 67[0m
+
+2019-02-20 12:42:05 info: [0mPOST /verification/sms/signup [33m400 [0m5.097 ms - 53[0m
+
+2019-02-20 12:43:53 info: [0mPOST /verification/sms/signup [33m401 [0m6.474 ms - 53[0m
+
+2019-02-20 12:43:55 info: OTP for phone verification at signup: 042248 <----> 9409521572
+2019-02-20 12:43:55 info: [0mPOST /signup [32m200 [0m54.070 ms - 67[0m
+
+2019-02-20 12:44:08 info: New User created: [object Object]
+2019-02-20 12:44:08 info: [0mPOST /verification/sms/signup [32m200 [0m226.945 ms - 49[0m
+
+2019-02-20 12:44:26 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m19.225 ms - 60[0m
+
+2019-02-20 12:44:31 info: [0mPOST /signup?referral_id=lmiiXUD [33m406 [0m7.420 ms - 67[0m
+
+2019-02-20 12:44:53 info: OTP for phone verification at signup: 047592 <----> 7990491267
+2019-02-20 12:44:53 info: [0mPOST /signup?referral_id=lmiiXUD [32m200 [0m15.998 ms - 67[0m
+
+2019-02-20 12:45:08 info: New User created: [object Object]
+2019-02-20 12:45:08 info: New Referral entry: parth9218 ---> prayag9218
+2019-02-20 12:45:08 info: New coupon given to parth9218
+2019-02-20 12:45:08 info: [0mPOST /verification/sms/signup [32m200 [0m326.940 ms - 63[0m
+
+2019-02-20 12:45:30 info: [0mPOST /login [33m401 [0m174.687 ms - 61[0m
+
+2019-02-20 12:45:39 info: [0mPOST /login [33m401 [0m185.789 ms - 61[0m
+
+2019-02-20 12:45:47 info: OTP for reset password: 079155 <----> 9409521572
+2019-02-20 12:45:47 info: [0mPOST /resetpassword [32m200 [0m5.679 ms - 67[0m
+
+2019-02-20 12:46:02 info: [0mPOST /verification/sms/resetpassword [33m400 [0m1.717 ms - 53[0m
+
+2019-02-20 12:47:09 info: OTP for reset password: 034657 <----> 9409521572
+2019-02-20 12:47:09 info: [0mPOST /resetpassword [32m200 [0m69.944 ms - 67[0m
+
+2019-02-20 12:47:21 info: parth9218  changed password
+2019-02-20 12:47:21 info: [0mPOST /verification/sms/resetpassword [32m200 [0m234.344 ms - 58[0m
+
+2019-02-20 12:47:38 info: [0mPOST /login [32m200 [0m176.701 ms - 58[0m
+
+2019-02-20 12:48:35 info: [0mPOST /admin/validation/redeem [32m200 [0m55.840 ms - 62[0m
+
+2019-02-20 12:48:35 info: ed44f714-5602-431f-9d4c-a78d304fe1f9 was redeemed.
+2019-02-20 12:48:37 info: [0mPOST /admin/validation/redeem [32m200 [0m10.293 ms - 69[0m
+
+2019-02-20 12:49:12 info: [0mPOST /login [32m200 [0m178.153 ms - 58[0m
+
+2019-02-20 12:49:12 info: [0mPOST /login [33m401 [0m192.077 ms - 61[0m
+
+2019-02-20 12:49:12 info: OTP for phone verification at signup: 068377 <----> 7938238195
+2019-02-20 12:49:12 info: [0mPOST /signup [32m200 [0m18.281 ms - 67[0m
+
+2019-02-20 12:49:12 info: [0mPOST /signup [33m406 [0m5.370 ms - 67[0m
+
+2019-02-20 12:49:12 info: [0mPOST /signup [33m406 [0m0.448 ms - 105[0m
+
+2019-02-20 12:49:12 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m6.177 ms - 60[0m
+
+2019-02-20 12:49:12 info: [0mGET /signup?referral_id=234wef [33m412 [0m5.619 ms - 52[0m
+
+2019-02-20 12:49:59 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m18.583 ms - 60[0m
+
+2019-02-20 12:52:07 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m14.270 ms - 60[0m
+
+2019-02-20 12:55:07 info: [0mPOST /login [32m200 [0m190.450 ms - 58[0m
+
+2019-02-20 12:55:07 info: [0mPOST /login [33m401 [0m159.362 ms - 61[0m
+
+2019-02-20 12:55:07 info: OTP for phone verification at signup: 004579 <----> 7938238195
+2019-02-20 12:55:07 info: [0mPOST /signup [32m200 [0m7.001 ms - 67[0m
+
+2019-02-20 12:55:07 info: [0mPOST /signup [33m406 [0m4.169 ms - 67[0m
+
+2019-02-20 12:55:07 info: [0mPOST /signup [33m406 [0m0.406 ms - 105[0m
+
+2019-02-20 12:55:07 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m4.621 ms - 60[0m
+
+2019-02-20 12:55:07 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.648 ms - 52[0m
+
+2019-02-20 12:55:12 info: [0mPOST /login [32m200 [0m172.438 ms - 58[0m
+
+2019-02-20 12:55:13 info: [0mPOST /login [33m401 [0m150.942 ms - 61[0m
+
+2019-02-20 12:55:13 info: OTP for phone verification at signup: 040440 <----> 7938238195
+2019-02-20 12:55:13 info: [0mPOST /signup [32m200 [0m4.811 ms - 67[0m
+
+2019-02-20 12:55:13 info: [0mPOST /signup [33m406 [0m3.939 ms - 67[0m
+
+2019-02-20 12:55:13 info: [0mPOST /signup [33m406 [0m0.363 ms - 105[0m
+
+2019-02-20 12:55:13 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m4.615 ms - 60[0m
+
+2019-02-20 12:55:13 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.549 ms - 52[0m
+
+2019-02-20 12:55:44 info: [0mPOST /login [32m200 [0m150.986 ms - 58[0m
+
+2019-02-20 12:55:44 info: [0mPOST /login [33m401 [0m170.650 ms - 61[0m
+
+2019-02-20 12:55:44 info: OTP for phone verification at signup: 023189 <----> 7938238195
+2019-02-20 12:55:44 info: [0mPOST /signup [32m200 [0m5.285 ms - 67[0m
+
+2019-02-20 12:55:44 info: [0mPOST /signup [33m406 [0m5.518 ms - 67[0m
+
+2019-02-20 12:55:44 info: [0mPOST /signup [33m406 [0m0.373 ms - 105[0m
+
+2019-02-20 12:55:44 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m3.923 ms - 60[0m
+
+2019-02-20 12:55:44 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.363 ms - 52[0m
+
+2019-02-20 12:56:04 info: [0mPOST /login [32m200 [0m163.992 ms - 58[0m
+
+2019-02-20 12:56:04 info: [0mPOST /login [33m401 [0m161.187 ms - 61[0m
+
+2019-02-20 12:56:04 info: OTP for phone verification at signup: 031492 <----> 7938238195
+2019-02-20 12:56:04 info: [0mPOST /signup [32m200 [0m21.936 ms - 67[0m
+
+2019-02-20 12:56:04 info: [0mPOST /signup [33m406 [0m4.419 ms - 67[0m
+
+2019-02-20 12:56:04 info: [0mPOST /signup [33m406 [0m0.441 ms - 105[0m
+
+2019-02-20 12:56:04 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m10.935 ms - 60[0m
+
+2019-02-20 12:56:04 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.765 ms - 52[0m
+
+2019-02-20 12:58:03 info: [0mGET /signup?referral_id=lmiiXU43 [33m412 [0m15.773 ms - 52[0m
+
+2019-02-20 12:58:20 info: [0mPOST /login [32m200 [0m156.553 ms - 58[0m
+
+2019-02-20 12:58:21 info: [0mPOST /login [33m401 [0m145.125 ms - 61[0m
+
+2019-02-20 12:58:21 info: OTP for phone verification at signup: 015999 <----> 7938238195
+2019-02-20 12:58:21 info: [0mPOST /signup [32m200 [0m6.043 ms - 67[0m
+
+2019-02-20 12:58:21 info: [0mPOST /signup [33m406 [0m4.183 ms - 67[0m
+
+2019-02-20 12:58:21 info: [0mPOST /signup [33m406 [0m0.457 ms - 105[0m
+
+2019-02-20 12:58:21 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m5.471 ms - 60[0m
+
+2019-02-20 13:00:19 info: [0mPOST /login [32m200 [0m157.627 ms - 58[0m
+
+2019-02-20 13:00:19 info: [0mPOST /login [33m401 [0m137.494 ms - 61[0m
+
+2019-02-20 13:00:19 info: OTP for phone verification at signup: 046586 <----> 7938238195
+2019-02-20 13:00:19 info: [0mPOST /signup [32m200 [0m5.348 ms - 67[0m
+
+2019-02-20 13:00:19 info: [0mPOST /signup [33m406 [0m5.744 ms - 67[0m
+
+2019-02-20 13:00:19 info: [0mPOST /signup [33m406 [0m0.375 ms - 105[0m
+
+2019-02-20 13:00:19 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m5.120 ms - 60[0m
+
+2019-02-20 13:00:19 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.778 ms - 52[0m
+
+2019-02-20 13:01:55 info: [0mPOST /login [32m200 [0m151.549 ms - 58[0m
+
+2019-02-20 13:01:55 info: [0mPOST /login [33m401 [0m135.569 ms - 61[0m
+
+2019-02-20 13:01:55 info: OTP for phone verification at signup: 057315 <----> 7938238195
+2019-02-20 13:01:55 info: [0mPOST /signup [32m200 [0m4.890 ms - 67[0m
+
+2019-02-20 13:01:55 info: [0mPOST /signup [33m406 [0m6.005 ms - 67[0m
+
+2019-02-20 13:01:55 info: [0mPOST /signup [33m406 [0m0.375 ms - 105[0m
+
+2019-02-20 13:01:55 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m4.341 ms - 60[0m
+
+2019-02-20 13:01:55 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.883 ms - 52[0m
+
+2019-02-20 13:02:44 info: [0mPOST /login [32m200 [0m170.987 ms - 58[0m
+
+2019-02-20 13:02:44 info: [0mPOST /login [33m401 [0m153.510 ms - 61[0m
+
+2019-02-20 13:02:44 info: OTP for phone verification at signup: 048438 <----> 7938238195
+2019-02-20 13:02:44 info: [0mPOST /signup [32m200 [0m5.714 ms - 67[0m
+
+2019-02-20 13:02:44 info: [0mPOST /signup [33m406 [0m4.766 ms - 67[0m
+
+2019-02-20 13:02:44 info: [0mPOST /signup [33m406 [0m0.337 ms - 105[0m
+
+2019-02-20 13:02:44 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m4.166 ms - 60[0m
+
+2019-02-20 13:02:44 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.493 ms - 52[0m
+
+2019-02-20 13:03:21 info: [0mPOST /login [32m200 [0m161.670 ms - 58[0m
+
+2019-02-20 13:03:21 info: [0mPOST /login [33m401 [0m141.328 ms - 61[0m
+
+2019-02-20 13:03:21 info: OTP for phone verification at signup: 079222 <----> 7938238195
+2019-02-20 13:03:21 info: [0mPOST /signup [32m200 [0m5.546 ms - 67[0m
+
+2019-02-20 13:03:21 info: [0mPOST /signup [33m406 [0m5.339 ms - 67[0m
+
+2019-02-20 13:03:21 info: [0mPOST /signup [33m406 [0m0.346 ms - 105[0m
+
+2019-02-20 13:03:21 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m8.451 ms - 60[0m
+
+2019-02-20 13:03:21 info: [0mGET /signup?referral_id=234wef [33m412 [0m4.932 ms - 52[0m
+
+2019-02-20 13:03:32 info: [0mPOST /login [32m200 [0m142.284 ms - 58[0m
+
+2019-02-20 13:03:32 info: [0mPOST /login [33m401 [0m141.446 ms - 61[0m
+
+2019-02-20 13:03:32 info: OTP for phone verification at signup: 092019 <----> 7938238195
+2019-02-20 13:03:32 info: [0mPOST /signup [32m200 [0m5.222 ms - 67[0m
+
+2019-02-20 13:03:32 info: [0mPOST /signup [33m406 [0m5.180 ms - 67[0m
+
+2019-02-20 13:03:32 info: [0mPOST /signup [33m406 [0m0.342 ms - 105[0m
+
+2019-02-20 13:03:32 info: [0mGET /signup?referral_id=lmiiXUD [32m200 [0m14.837 ms - 60[0m
+
+2019-02-20 13:03:32 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.424 ms - 52[0m
+

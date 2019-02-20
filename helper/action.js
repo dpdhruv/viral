@@ -1,17 +1,15 @@
 var { createUser, createUserWithReferral } = require('../controllers/user');
 var { encrypt, decrypt } = require('../helper/crypt');
-const { validJWT } = require('../helper/jwt_ops');
+const { removeJWT } = require('../helper/jwt_ops');
+const { validJWT } = require('../controllers/jwt');
 const logger = require('../config/winston');
 const User = require('../models/user');
 var { sendSMS } = require('../helper/message');
 const { isValidPassword } = require('../helper/user');
+const roles = require('../config/roles');
 
 module.exports.signup = async function (req, res) {
     let decoded = req.decoded;
-    if(!validJWT(decoded))  {
-        res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});   
-        return;
-    }
     let user = JSON.parse(decrypt(decoded.user));
     if(user.phone_no != req.otp_map_to) {
         res.status(400).send({ status: 'Failure', message: 'Otp doesn\' match with corresponding number'});
@@ -19,19 +17,30 @@ module.exports.signup = async function (req, res) {
     }
     let referral = decoded.referrel;
     if(!referral)    {
+        if(!validJWT(roles.VERIFY_NEW_USER, decoded))  {
+            removeJWT(res);
+            res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});   
+            return;
+        }        
         if(!await createUser(req, res, user))    {
             res.status(500).send({ status: 'failure', message: 'Something went wrong on the server'});
         }   else    {
             res.status(200).send({ status:  'success', message: 'New User created'});
         }
     }   else    {
+        if(!validJWT(roles.VERIFY_REFERRAL_USER, decoded))  {
+            removeJWT(res);
+            res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});   
+            return;
+        }        
         const response = await createUserWithReferral(req, res, user, referral);
         res.status(response.code).send(response.body);                
     }
 }
 
 module.exports.resetpassword = (req, res) => {
-    if(!validJWT(req.decoded))  {
+    if(!validJWT(roles.PASSWORD_RESET, req.decoded))  {
+        removeJWT(res);
         res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});   
         return;
     }

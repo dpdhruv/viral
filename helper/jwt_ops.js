@@ -1,6 +1,7 @@
 const key = require('../config/crypto');
 var jwt_config = require('../config/jwt');
 const jwt = require('jsonwebtoken');
+const roles = require('../config/roles');
 
 module.exports.prepareJWTCookies = function (jwt, res, maxAge)  {
     const first = jwt.split('.')[0] + '.' + jwt.split('.')[1];
@@ -51,21 +52,8 @@ module.exports.jwtChecker = function (req, res, next)   {
     next();
 };
 
-module.exports.validJWT = function(jwt)   {
-    return true;
-    if(!jwt.role)   {
-        return false;
-    }
-    switch(jwt.role)  {
-        case 'user':
-            break;
-        case 'signup_referral':
-            break;
-        case 'verify_new_user':
-            break;
-        case 'verify_referral_user':
-            break;
-        case 'password_reset':
-            break;
-    }
+
+module.exports.removeJWT = function(res)    {
+    res.clearCookie('access-token-1');
+    res.clearCookie('access-token-2');
 }

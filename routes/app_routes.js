@@ -1,13 +1,13 @@
 var router = require('express').Router();
 var logger = require('../config/winston');
 var { sendSMS } = require('../helper/message');
-const { getJwt, prepareJWTCookies, jwtChecker, validJWT } = require('../helper/jwt_ops');
-var voucher_codes = require('voucher-code-generator');
+const { getJwt, prepareJWTCookies, jwtChecker, removeJWT } = require('../helper/jwt_ops');
+const { validJWT } = require('../controllers/jwt');
 var { encrypt, decrypt } = require('../helper/crypt');
 var { check_user_details } = require('../helper/user');
 var User = require('../models/user');
-var { signup, resetpassword } = require('../helper/action');
 var { otps, getReferralCode } = require('../models/otp_pool.js');
+var roles = require('../config/roles');
 
 
 module.exports = function(app)  {
@@ -17,9 +17,9 @@ module.exports = function(app)  {
 
     router.get('/dashboard', jwtChecker, (req, res) => {
         if(!req.err)    {
-            if(!validJWT(req.decoded))  {
+            if(!validJWT(roles.USER, req.decoded))  {
+                removeJWT(res);
                 res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});
-                    return;
             }
             res.send(200).send({ status: 'success', message: 'Okay'});
         } else  {
@@ -37,7 +37,7 @@ module.exports = function(app)  {
         else if (!user.validPassword(password)) {
             res.status(401).send({ status: 'failure', message: 'Invalid Username or password'});
         } else {
-            const j = getJwt({ role: 'user', useruuid: user.username});
+            const j = getJwt({ role: roles.USER , useruuid: user.username});
             prepareJWTCookies(j, res);
             res.status(200).send({ status: 'success', message: 'Successful Authentication'});
         }
@@ -50,7 +50,7 @@ module.exports = function(app)  {
                 if(!user)   {
                     res.status(412).send({ status: 'failure', message: 'Invalid referral id'});
                 }   else    {        
-                    prepareJWTCookies(getJwt({ role: 'signup_referral', referrer: user.username, referral_token: user.referral_token }, 1*365*24*60*60*1000), res, 1*365*24*60*60*1000);
+                    prepareJWTCookies(getJwt({ role: roles.SIGNUP_REFERRAL, referrer: user.username, referral_token: user.referral_token }, 1*365*24*60*60*1000), res, 1*365*24*60*60*1000);
                     res.status(200).send({ status: 'success', message: 'sign up as with referral id' }) 
                 }}).catch(err => {
                     logger.error(`DataBase Error: ${err.message}`);
@@ -75,19 +75,11 @@ module.exports = function(app)  {
             return;
         }
         if(!req.err)    {
-            if(!validJWT(req.decoded))   {
-                res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});
-                return;
-            }
-            prepareJWTCookies(getJwt({ role: 'verify_referral_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}, 10*60), res, 10*60*1000);
+            prepareJWTCookies(getJwt({ role: roles.VERIFY_REFERRAL_USER , user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}, 10*60), res, 10*60*1000);
         }   else if(req.err.code == 103)   {
-                prepareJWTCookies(getJwt({ role: 'verify_new_user', user: encrypt(JSON.stringify(user)) }, 10*60*1000), res, 10*60*1000);
+                prepareJWTCookies(getJwt({ role: roles.VERIFY_NEW_USER, user: encrypt(JSON.stringify(user)) }, 10*60*1000), res, 10*60*1000);
         }   else    {
-                if(!validJWT(req.decoded))   {
-                    res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});
-                    return;
-                }
-                prepareJWTCookies(getJwt({ role: 'verify_referral_user', user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}, 10*60*1000), res, 10*60*1000);
+                prepareJWTCookies(getJwt({ role: roles.VERIFY_REFERRAL_USER, user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}, 10*60*1000), res, 10*60*1000);
         }
         const otp = getReferralCode();
         logger.info(`OTP for phone verification at signup: ${otp} <----> ${user.phone_no}`);        
@@ -100,7 +92,7 @@ module.exports = function(app)  {
     router.post('/resetpassword', (req, res) => {
         User.findOne({ where: { username: req.body.username }}).then((user) => {
             if(user)    {
-                prepareJWTCookies(getJwt({ role: 'password_reset', user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
+                prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
                 let otp = getReferralCode();
                 sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
                 otps.set(otp, { created_at: Date.now, to: user.phone_no });
