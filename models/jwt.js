@@ -18,6 +18,7 @@ module.exports.SIGNUP_REFERRAL_JWT = {
 module.exports.VERIFY_NEW_USER_JWT = {
     role: { type: String },
     user: { type: String },
+    otp:  { type: String },
     iat: { type: Number },
     exp: { type: Number }
 }
@@ -25,6 +26,7 @@ module.exports.VERIFY_NEW_USER_JWT = {
 module.exports.VERIFY_REFERRAL_USER_JWT = {
     role: { type: String },
     user: { type: String },
+    otp:  { type: String },
     referrel: { 
         type: Object,
 

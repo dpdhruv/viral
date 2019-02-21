@@ -3,7 +3,7 @@ module.exports.otps = new Map();
 let referrel_code = [];
 
 
-module.exports.getReferralCode = function()  {
+module.exports.getOtp = function()  {
     let code = referrel_code.pop();
     if(!code)   {
         referrel_code = voucher_codes.generate({

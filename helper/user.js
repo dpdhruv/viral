@@ -74,4 +74,5 @@ function isValidName(name) {
 }
 
 
+module.exports.isValidPhoneNumber = isValidPhoneNumber;
 module.exports.isValidPassword = isValidPassword;

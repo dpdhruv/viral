@@ -7,13 +7,14 @@ var Coupon = require('../models/coupon');
 var User_coupon = require('../models/user_coupon');
 var Reward = require('../models/reward');
 
-async function createUserWithReferral(req, res, user, referral) {
+async function createUserWithReferral(req, res, user) {
     return await new Promise(async (resolve) => {
         let usr = await createUser(req, res, user);
         if(!usr)    {
             resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the server'}});
         }
         else    {
+            let referral = req.decoded;
             Referral.create({
                 user_id: referral.referrer,
                 referral_id: referral.referral_token,
@@ -23,8 +24,8 @@ async function createUserWithReferral(req, res, user, referral) {
                 referrer = await User.findOne({ where: { username: referrel.user_id }});
                 sendSMS(`${usr.name} has just signed up`, referrer.dataValues.phone_no);
                 let coupons_got = await User_coupon.count({ where: { user_id: referrer.dataValues.username }});
-                if(coupons_got < 12)    {
-                    let reward = await Reward.findOne({ where: { campaign_id: 1, reward_id: 1}});
+                let reward = await Reward.findOne({ where: { campaign_id: 1, reward_id: 1}});
+                if(coupons_got < reward.dataValues.threshold)    {
                     let coupon = await Coupon.create({ code: reward.dataValues.coupon_code, coupon_value: reward.dataValues.coupon_value, coupon_message: reward.dataValues.coupon_message })
                     logger.info(`New coupon given to ${referrer.dataValues.username}`);
                     sendSMS('You have got a coupon.', referrer.dataValues.phone_no);

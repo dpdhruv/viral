@@ -4,37 +4,44 @@ const { removeJWT } = require('../helper/jwt_ops');
 const { validJWT } = require('../controllers/jwt');
 const logger = require('../config/winston');
 const User = require('../models/user');
+var { check_user_details, isValidPhoneNumber } = require('../helper/user');
 var { sendSMS } = require('../helper/message');
 const { isValidPassword } = require('../helper/user');
+var { otps } = require('../models/otp_pool.js');
 const roles = require('../config/roles');
 
 module.exports.signup = async function (req, res) {
-    let decoded = req.decoded;
-    let user = JSON.parse(decrypt(decoded.user));
+    user = {
+        username: req.body.username,
+        password: req.body.password,
+        name: req.body.name,
+        phone_no: req.body.phone_no
+    }
     if(user.phone_no != req.otp_map_to) {
         res.status(400).send({ status: 'Failure', message: 'Otp doesn\' match with corresponding number'});
         return ;
     }
-    let referral = decoded.referrel;
-    if(!referral)    {
-        if(!validJWT(roles.VERIFY_NEW_USER, decoded))  {
+    let message = await check_user_details(user);
+    if(message) {
+        res.status(406).send({ status: 'failure', message: message} );
+        return;
+    }
+    otps.delete(req.body.otp);
+    let decoded = req.decoded;
+    if(decoded) {
+        if(!validJWT(roles.SIGNUP_REFERRAL, decoded))  {
             removeJWT(res);
             res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});   
             return;
         }        
+        const response = await createUserWithReferral(req, res, user);
+        res.status(response.code).send(response.body);                
+    }   else    {
         if(!await createUser(req, res, user))    {
             res.status(500).send({ status: 'failure', message: 'Something went wrong on the server'});
         }   else    {
             res.status(200).send({ status:  'success', message: 'New User created'});
         }
-    }   else    {
-        if(!validJWT(roles.VERIFY_REFERRAL_USER, decoded))  {
-            removeJWT(res);
-            res.status(400).send({ status: 'failure', mesage: 'Invalid fields in JWT'});   
-            return;
-        }        
-        const response = await createUserWithReferral(req, res, user, referral);
-        res.status(response.code).send(response.body);                
     }
 }
 
@@ -54,6 +61,7 @@ module.exports.resetpassword = (req, res) => {
         res.status(400).send({ status: 'Failure', message: 'Invalid Password'});
         return ;
     }
+    otps.delete(req.body.otp);
     User.findOne({ where: { username: user.username }}).then(usr => {
         usr.update({ password: req.body.password }).then(ur => {
             sendSMS(`You just reset your password`, ur.phone_no);

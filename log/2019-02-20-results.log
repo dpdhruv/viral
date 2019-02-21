@@ -1128,3 +1128,47 @@ notNull Violation: referral.referral_id cannot be null
 
 2019-02-20 13:03:32 info: [0mGET /signup?referral_id=234wef [33m412 [0m3.424 ms - 52[0m
 
+2019-02-20 17:48:29 info: [0mGET / [33m404 [0m6.142 ms - 139[0m
+
+2019-02-20 17:48:30 info: [0mGET /favicon.ico [33m404 [0m1.007 ms - 150[0m
+
+2019-02-20 17:48:35 info: [0mGET /login [32m200 [0m7.112 ms - 10[0m
+
+2019-02-20 17:50:47 info: [0mGET / [33m404 [0m1.394 ms - 139[0m
+
+2019-02-20 17:52:07 info: [0mPOST / [33m404 [0m0.324 ms - 140[0m
+
+2019-02-20 17:52:16 info: [0mPOST /signup [33m406 [0m88.194 ms - 67[0m
+
+2019-02-20 17:53:13 info: [0mPOST /login [32m200 [0m163.230 ms - 58[0m
+
+2019-02-20 18:15:17 info: [0mGET / [33m404 [0m0.753 ms - 139[0m
+
+2019-02-20 18:15:24 info: [0mGET / [33m404 [0m0.362 ms - 139[0m
+
+2019-02-20 18:15:25 info: [0mGET /favicon.ico [33m404 [0m0.340 ms - 150[0m
+
+2019-02-20 18:15:28 info: [0mGET / [33m404 [0m0.782 ms - 139[0m
+
+2019-02-20 18:15:47 info: [0mPOST /login [32m200 [0m153.643 ms - 58[0m
+
+2019-02-20 18:17:36 info: [0mGET /login [32m200 [0m0.838 ms - 10[0m
+
+2019-02-20 18:17:55 info: [0mGET /signup [32m200 [0m1.052 ms - 54[0m
+
+2019-02-20 18:17:59 info: [0mGET /login [32m200 [0m0.806 ms - 10[0m
+
+2019-02-20 18:18:05 info: [0mPOST /login [32m200 [0m154.681 ms - 58[0m
+
+2019-02-20 18:18:22 info: [0mGET /resetpassword [33m404 [0m0.740 ms - 152[0m
+
+2019-02-20 18:18:42 info: [0mGET /admin/validation [33m404 [0m1.091 ms - 155[0m
+
+2019-02-20 18:18:49 info: [0mGET /admin/validation/password [33m404 [0m1.217 ms - 164[0m
+
+2019-02-20 18:19:02 info: [0mGET /admin/validation/redeem [33m404 [0m0.468 ms - 162[0m
+
+2019-02-20 18:32:09 info: [0mGET / [33m404 [0m0.363 ms - 139[0m
+
+2019-02-20 18:32:25 info: [0mPOST /login [32m200 [0m150.805 ms - 58[0m
+

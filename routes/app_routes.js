@@ -4,10 +4,11 @@ var { sendSMS } = require('../helper/message');
 const { getJwt, prepareJWTCookies, jwtChecker, removeJWT } = require('../helper/jwt_ops');
 const { validJWT } = require('../controllers/jwt');
 var { encrypt, decrypt } = require('../helper/crypt');
-var { check_user_details } = require('../helper/user');
 var User = require('../models/user');
-var { otps, getReferralCode } = require('../models/otp_pool.js');
+var { otps, getOtp } = require('../models/otp_pool.js');
+var {  isValidPhoneNumber } = require('../helper/user');
 var roles = require('../config/roles');
+var { signup } = require('../helper/action');
 
 
 module.exports = function(app)  {
@@ -25,6 +26,25 @@ module.exports = function(app)  {
         } else  {
             res.status(401).send({ status: 'failure', message: 'Unauthorized Access'});
         }       
+    });
+
+    router.post('/getotp', async (req, res) => {
+        if(!req.body.phone_no)   {
+            res.status(400).send({ status: 'failure', message: 'Enter a phone number'});
+        }   else if(!isValidPhoneNumber(req.body.phone_no))   {
+            res.status(400).send({ status: 'failure', message: 'Enter a valid phone number'});
+        }   else    {
+            const count = await User.count({ where: { phone_no: req.body.phone_no }});
+            if(count > 0)   {
+                res.status(400).send({ status: 'failure', message: 'phone number exists'});
+                return;
+            }
+            let otp = getOtp();
+            logger.info(`OTP for phone verification at signup: ${otp} <----> ${req.body.phone_no}`);        
+            sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
+            otps.set(otp, { created_at: Date.now, to: req.body.phone_no });
+            res.status(200).send({ status: 'success', message: 'Otp sent for verification'});
+        }
     });
 
     router.post('/login', async (req, res) => {
@@ -63,29 +83,13 @@ module.exports = function(app)  {
 
 
     router.post('/signup', jwtChecker, async (req, res) => {
-        user = {
-            username: req.body.username,
-            password: req.body.password,
-            name: req.body.name,
-            phone_no: req.body.phone_no
-        }
-        let message = await check_user_details(user);
-        if(message) {
-            res.status(406).send({ status: 'failure', message: message} );
+        let otp_map = otps.get(req.body.otp)
+        if(!otp_map)  {
+            res.status(401).send({ status: 'failure', message: 'Invalid Otp Obtained'});
             return;
         }
-        if(!req.err)    {
-            prepareJWTCookies(getJwt({ role: roles.VERIFY_REFERRAL_USER , user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token:  req.decoded.referral_token }}, 10*60), res, 10*60*1000);
-        }   else if(req.err.code == 103)   {
-                prepareJWTCookies(getJwt({ role: roles.VERIFY_NEW_USER, user: encrypt(JSON.stringify(user)) }, 10*60*1000), res, 10*60*1000);
-        }   else    {
-                prepareJWTCookies(getJwt({ role: roles.VERIFY_REFERRAL_USER, user: encrypt(JSON.stringify(user)),  referrel: { referrer: req.decoded.referrer, referral_token: req.decoded.referral_token }}, 10*60*1000), res, 10*60*1000);
-        }
-        const otp = getReferralCode();
-        logger.info(`OTP for phone verification at signup: ${otp} <----> ${user.phone_no}`);        
-        sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
-        otps.set(otp, { created_at: Date.now, to: user.phone_no });
-        res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
+        req.otp_map_to = otp_map.to;
+        signup(req, res);
     });
 
 
@@ -93,7 +97,7 @@ module.exports = function(app)  {
         User.findOne({ where: { username: req.body.username }}).then((user) => {
             if(user)    {
                 prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
-                let otp = getReferralCode();
+                let otp = getOtp();
                 sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
                 otps.set(otp, { created_at: Date.now, to: user.phone_no });
                 logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);

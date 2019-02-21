@@ -15,11 +15,7 @@ module.exports = function(app)  {
                 return;
             }
             req.otp_map_to = otp_map.to;
-            otps.delete(req.body.otp);
             switch(req.params.action)   {
-                case 'signup':
-                    signup(req, res);
-                    break
                 case 'resetpassword':
                     resetpassword(req, res);
                     break
