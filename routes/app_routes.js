@@ -29,6 +29,7 @@ module.exports = function(app)  {
     });
 
     router.post('/getotp', async (req, res) => {
+        console.log(`/getotp: ${req.body}`);
         if(!req.body.phone_no)   {
             res.status(400).send({ status: 'failure', message: 'Enter a phone number'});
         }   else if(!isValidPhoneNumber(req.body.phone_no))   {
@@ -48,6 +49,7 @@ module.exports = function(app)  {
     });
 
     router.post('/login', async (req, res) => {
+        console.log(`/login: ${req.body}`);
         var username = req.body.username,
         password = req.body.password;
         User.findOne({ where: { username: username }}).then(function (user) {
@@ -65,6 +67,7 @@ module.exports = function(app)  {
     });
     
     router.get('/signup', (req, res) => {
+        console.log(`/signup: ${req.query}`);
         if(req.query.referral_id)   {
             User.findOne({where: { referral_token: req.query.referral_id }}).then(user => {
                 if(!user)   {
@@ -83,6 +86,7 @@ module.exports = function(app)  {
 
 
     router.post('/signup', jwtChecker, async (req, res) => {
+        console.log(`/signup: ${req.body}`);
         let otp_map = otps.get(req.body.otp)
         if(!otp_map)  {
             res.status(401).send({ status: 'failure', message: 'Invalid Otp Obtained'});
@@ -94,6 +98,7 @@ module.exports = function(app)  {
 
 
     router.post('/resetpassword', (req, res) => {
+        console.log(`/resetpassword: ${req.body}`);
         User.findOne({ where: { username: req.body.username }}).then((user) => {
             if(user)    {
                 prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);

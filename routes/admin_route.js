@@ -9,6 +9,7 @@ var { sendSMS } = require('../helper/message');
 module.exports = function(app)  {
     
     router.post('/validation/redeem',async (req, res) => {
+        console.log(`/validation/redeem: ${req.body}`);
         if(!req.err)    {
             if(!req.body.coupon || !req.body.user)    {
                 res.status(400).send({ status: 'failure', message: 'coupon or user is not specified' });

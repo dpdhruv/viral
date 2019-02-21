@@ -6,6 +6,7 @@ var { otps, getReferralCode } = require('../models/otp_pool.js');
 
 module.exports = function(app)  {
     router.post('/sms/:action', jwtChecker,async (req, res) => {
+        console.log(`/verification/sms/: ${req.body}`);
         if(!req.params.action || !req.body.otp)  {
             res.status(400).send({ status: 'failure', mesage: 'action or otp is not specified'});
         }   else    {
