@@ -44,7 +44,7 @@ module.exports = function(app)  {
             logger.info(`OTP for phone verification at signup: ${otp} <----> ${req.body.phone_no}`);        
             sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
             otps.set(otp, { created_at: Date.now, to: req.body.phone_no });
-            res.status(200).send({ status: 'success', message: 'Otp sent for verification'});
+            res.status(200).send({ status: 'success', message: 'Otp sent for verification', otp: otp});
         }
     });
 
@@ -106,7 +106,7 @@ module.exports = function(app)  {
                 sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
                 otps.set(otp, { created_at: Date.now, to: user.phone_no });
                 logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);
-                res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
+                res.status(200).send({ status: 'success', message: 'otp has been sent for verification', otp: otp});
             }   else{
                 res.status.send({ status: 'failure', message: 'User doesn\'t exist'});
             }
