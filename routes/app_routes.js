@@ -29,6 +29,7 @@ module.exports = function(app)  {
     });
 
     router.post('/getotp', async (req, res) => {
+        console.log(`/getotp: ${req.body}`);
         if(!req.body.phone_no)   {
             res.status(400).send({ status: 'failure', message: 'Enter a phone number'});
         }   else if(!isValidPhoneNumber(req.body.phone_no))   {
@@ -43,11 +44,12 @@ module.exports = function(app)  {
             logger.info(`OTP for phone verification at signup: ${otp} <----> ${req.body.phone_no}`);        
             sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
             otps.set(otp, { created_at: Date.now, to: req.body.phone_no });
-            res.status(200).send({ status: 'success', message: 'Otp sent for verification'});
+            res.status(200).send({ status: 'success', message: 'Otp sent for verification', otp: otp});
         }
     });
 
     router.post('/login', async (req, res) => {
+        console.log(`/login: ${req.body}`);
         var username = req.body.username,
         password = req.body.password;
         User.findOne({ where: { username: username }}).then(function (user) {
@@ -65,6 +67,7 @@ module.exports = function(app)  {
     });
     
     router.get('/signup', (req, res) => {
+        console.log(`/signup: ${req.query}`);
         if(req.query.referral_id)   {
             User.findOne({where: { referral_token: req.query.referral_id }}).then(user => {
                 if(!user)   {
@@ -83,6 +86,7 @@ module.exports = function(app)  {
 
 
     router.post('/signup', jwtChecker, async (req, res) => {
+        console.log(`/signup: ${req.body}`);
         let otp_map = otps.get(req.body.otp)
         if(!otp_map)  {
             res.status(401).send({ status: 'failure', message: 'Invalid Otp Obtained'});
@@ -94,6 +98,7 @@ module.exports = function(app)  {
 
 
     router.post('/resetpassword', (req, res) => {
+        console.log(`/resetpassword: ${req.body}`);
         User.findOne({ where: { username: req.body.username }}).then((user) => {
             if(user)    {
                 prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
@@ -101,7 +106,7 @@ module.exports = function(app)  {
                 sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
                 otps.set(otp, { created_at: Date.now, to: user.phone_no });
                 logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);
-                res.status(200).send({ status: 'success', message: 'otp has been sent for verification'});
+                res.status(200).send({ status: 'success', message: 'otp has been sent for verification', otp: otp});
             }   else{
                 res.status.send({ status: 'failure', message: 'User doesn\'t exist'});
             }

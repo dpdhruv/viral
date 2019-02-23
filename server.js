@@ -10,7 +10,7 @@ var { add_dummy } = require('./dummy.js');
 
 const port = process.env.PORT || 8080;
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 // set morgan to log info about our requests for development use.
 app.use(morgan('dev', { stream: logger.stream }));
