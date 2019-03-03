@@ -4,7 +4,7 @@ module.exports.USER_JWT = {
     role: { type: String },
     useruuid: { type: String },
     iat: { type: Number },
-    exp: { type: Number }
+    exp: { type: Number }   
 }
 
 module.exports.SIGNUP_REFERRAL_JWT = {

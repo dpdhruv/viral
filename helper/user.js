@@ -67,8 +67,9 @@ function isValidPhoneNumber(phone_no)   {
     return regexp.test(phone_no);
 }
 
-function isValidName(name) {   
-    let pattern = /^[A-Za-z]+$/
+function isValidName(name) {  
+    name = name.trim();
+    let pattern = /^[A-Za-z]+(\s+[A-Za-z]+){0,1}$/
     let regexp = new RegExp(pattern);
     return regexp.test(name);
 }

@@ -1,1 +1,1 @@
-module.exports.url = process.env.DB_URL || 'postgres://rjakaexw:xD-tGC7Up4TvS-24iTBVRnCKtjrYEdF2@baasu.db.elephantsql.com:5432/rjakaexw';
+module.exports.url = process.env.DB_URL || 'postgres://postgres:root@localhost:5432/test';
