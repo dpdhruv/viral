@@ -12,15 +12,6 @@ module.exports.validJWT = function(role, jwt)   {
         case roles.USER:
             val = jwt_schema.USER_JWT;
             break;
-        case roles.SIGNUP_REFERRAL:
-            val = jwt_schema.SIGNUP_REFERRAL_JWT;
-            break;
-        case roles.VERIFY_NEW_USER:
-            val = jwt_schema.VERIFY_NEW_USER_JWT
-            break;
-        case roles.VERIFY_REFERRAL_USER:
-            val = jwt_schema.VERIFY_REFERRAL_USER_JWT
-            break;
         case roles.PASSWORD_RESET:
             val = jwt_schema.PASSWORD_RESET_JWT;
             break;

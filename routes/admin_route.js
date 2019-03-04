@@ -9,7 +9,7 @@ var { sendSMS } = require('../helper/message');
 module.exports = function(app)  {
     
     router.post('/validation/redeem',async (req, res) => {
-        console.log(`/validation/redeem: ${req.body}`);
+        console.log(`/validation/redeem`, req.body);
         if(!req.err)    {
             if(!req.body.coupon || !req.body.user)    {
                 res.status(400).send({ status: 'failure', message: 'coupon or user is not specified' });
@@ -37,6 +37,22 @@ module.exports = function(app)  {
             }}  else    {
             res.status(401).send({ status: 'failure', message: 'Unauthorized Access' });
             }
+    });
+
+
+    router.get('/coupons/:userid', async (req, res) => {
+        let pairs = await User_coupon.findAll({ where: { user_id: req.params.userid}});
+        coupons = [];
+        for(let i = 0; i < pairs.length; i++)   {
+            let coupon = await Coupon.findOne({ where: { id: pairs[i].dataValues.coupon_id}})
+            coupons.push(coupon.dataValues);
+        }
+        res.send(coupons);
+    });
+
+    router.get('/coupons',async (req, res) => {
+        let coupons = await Coupon.findAll({});
+        res.send(coupons);
     });
 
     return router;

@@ -14,13 +14,12 @@ async function createUserWithReferral(req, res, user) {
             resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the server'}});
         }
         else    {
-            let referral = req.decoded;
             Referral.create({
-                user_id: referral.referrer,
-                referral_id: referral.referral_token,
-                referred_to: usr.username
+                user_id: user.referrer,
+                referral_id: user.referral_code,
+                referred_to: user.username
             }).then(async referrel => {
-                logger.info(`New Referral entry: ${referral.referrer} ---> ${usr.username}`);
+                logger.info(`New Referral entry: ${user.referrer} ---> ${usr.username}`);
                 referrer = await User.findOne({ where: { username: referrel.user_id }});
                 sendSMS(`${usr.name} has just signed up`, referrer.dataValues.phone_no);
                 let coupons_got = await User_coupon.count({ where: { user_id: referrer.dataValues.username }});
