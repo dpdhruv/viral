@@ -3,12 +3,13 @@ var jwt_config = require('../config/jwt');
 const jwt = require('jsonwebtoken');
 const roles = require('../config/roles');
 
-module.exports.prepareJWTCookies = function (jwt, res, maxAge)  {
+module.exports.prepareJWTCookies = function (jwt, res, req,  maxAge)  {
     const first = jwt.split('.')[0] + '.' + jwt.split('.')[1];
     const second = jwt.split('.')[2];
     if(!maxAge) {
         maxAge = jwt_config.expiry * 1000;
     }
+    req.jwt = jwt;
     res.cookie('access-token-1', first, { maxAge: maxAge, httpOnly: false});
     res.cookie('access-token-2', second, { maxAge: maxAge, httpOnly: false});
 }

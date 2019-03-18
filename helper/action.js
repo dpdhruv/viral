@@ -30,14 +30,14 @@ module.exports.signup = async function (req, res) {
                 user.referral_code = req.body.referral_code;
                 user.referrer = usr.username;
                 const response = await createUserWithReferral(req, res, user);
-                res.status(response.code).send(response.body);                
+                res.status(response.code).send(response.body);           
             }
         })
     }  else    {
         if(!await createUser(req, res, user))    {
             res.status(500).send({ status: 'failure', message: 'Something went wrong on the server'});
         }   else    {
-            res.status(200).send({ status:  'success', message: 'New User created'});
+            res.status(200).send({ jwt: req.jwt, status:  'success', message: 'New User created'});
         }
     }
 }

@@ -35,7 +35,7 @@ async function createUserWithReferral(req, res, user) {
                     })
                     referrer.update({ referral_status: 'expired'});
                 }
-                resolve({ code: 200, body: { status: 'success', message: 'New User Created with referrel'}});
+                resolve({ code: 200, body: { jwt: req.jwt , status: 'success', message: 'New User Created with referrel'}});
             }).catch(err => {
                 logger.error(err);
                 resolve({ code: 500, body: { status: 'failure', message: 'Something went wrong on the Server'}});
@@ -53,7 +53,7 @@ async function createUser(req, res, user)   {
             password: user.password,
         }).then(usr => {
             const j = getJwt({ role: 'user', useruuid: usr.username });
-            prepareJWTCookies(j, res);
+            prepareJWTCookies(j, res, req);
             logger.info(`New User created: ${user}`);
             sendSMS('Thank you for Signing up', usr.phone_no);
             resolve(usr);

@@ -61,8 +61,8 @@ module.exports = function(app)  {
             res.status(401).send({ status: 'failure', message: 'Invalid Username or password'});
         } else {
             const j = getJwt({ role: roles.USER , useruuid: user.username});
-            prepareJWTCookies(j, res);
-            res.status(200).send({ status: 'success', message: 'Successful Authentication'});
+            prepareJWTCookies(j, res, req);
+            res.status(200).send({ jwt: req.jwt, status: 'success', message: 'Successful Authentication'});
         }
         });
     });
@@ -85,7 +85,7 @@ module.exports = function(app)  {
         console.log(`/resetpassword`, req.body);
         User.findOne({ where: { username: req.body.username }}).then((user) => {
             if(user)    {
-                prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, 10*60*1000);
+                prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, req, 10*60*1000);
                 let otp = getOtp(user.phone_no, res);
                 if(otp) {
                     sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
