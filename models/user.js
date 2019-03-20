@@ -3,7 +3,12 @@ var bcrypt = require('bcrypt');
 var db = require('../config/db');
 var randomize = require('randomatic');
 
-var sequelize = new Sequelize(db.url);
+var sequelize = new Sequelize(db.url, {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: true
+  }
+});
 var table = 'users';
 
 // setup User model and its fields.
