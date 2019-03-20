@@ -11,6 +11,10 @@ module.exports = function(app)  {
         if(!req.params.action || !req.body.otp)  {
             res.status(400).send({ status: 'failure', mesage: 'action or otp is not specified'});
         }   else    {
+            if(req.err) {
+                res.status(401).send({ status: 'failure', message: 'Invalid or no JWT received'});
+                return
+            }
             let decoded = req.decoded.user;
             let user = { username: decoded.username, phone_no: decrypt(decoded.phone_no) };
             req.user = user;
