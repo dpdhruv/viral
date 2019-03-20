@@ -26,23 +26,19 @@ module.exports.getJwt = function(payload, time)   {
 }
 
 module.exports.jwtChecker = function (req, res, next)   {
-    if(!req.cookies["access-token-1"] || !req.cookies["access-token-2"])    {
+    if(!req.headers["access-token"])    {
         req.err = { status: 'failure', code: 103, 'message': 'No JWT found'};
         next();
         return;
     }
-    const j = req.cookies["access-token-1"] + "." + req.cookies["access-token-2"];
+    const j = req.headers["access-token"]
     jwt.verify(j, key, (err, decoded) => {
         if(err) {
-            res.clearCookie('access-token-1');
-            res.clearCookie('access-token-2');
             req.err = { status: 'failure', code: 100, message: 'jwt verification failed' }
         }
         else    {
             if(Date.now() >= decoded.exp)   {
                 req.decoded = decoded;
-                res.clearCookie('access-token-1');
-                res.clearCookie('access-token-2');
                 req.err = { status: 'failure', code: 101, message: 'jwt expired' }
             }
             else    {
@@ -55,6 +51,4 @@ module.exports.jwtChecker = function (req, res, next)   {
 
 
 module.exports.removeJWT = function(res)    {
-    res.clearCookie('access-token-1');
-    res.clearCookie('access-token-2');
 }
