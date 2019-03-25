@@ -5,6 +5,7 @@ const { getJwt, prepareJWTCookies, jwtChecker, removeJWT } = require('../helper/
 const { validJWT } = require('../controllers/jwt');
 var { encrypt, decrypt } = require('../helper/crypt');
 var User = require('../models/user');
+var User_coupon = require('../models/user_coupon')
 var {  isValidPhoneNumber } = require('../helper/user');
 var roles = require('../config/roles');
 var { signup } = require('../helper/action');
@@ -80,6 +81,21 @@ module.exports = function(app)  {
         signup(req, res);
     });
 
+    router.get('/coupons', jwtChecker, async (req, res) => {
+        if(req.err) {
+            res.status(401).send({ status: 'failure', message: 'Unauthorized'});
+        }  else if(!validJWT(roles.USER, req.decoded))  {
+            res.status({ status: 'failure', message: 'Invalid JWT'})
+        }  else {
+            let pairs = await User_coupon.findAll({ where: { user_id: req.decoded.useruuid }});
+            coupons = [];
+            for(let i = 0; i < pairs.length; i++)   {
+                let coupon = await Coupon.findOne({ where: { id: pairs[i].dataValues.coupon_id}})
+                coupons.push(coupon.dataValues);
+            }
+            res.send({ status: "success",  message: "", coupons: coupons});
+        }
+    })
 
     router.post('/resetpassword', (req, res) => {
         console.log(`/resetpassword`, req.body);

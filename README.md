@@ -67,6 +67,16 @@ POST /getotp
                         "message": "MESSAGE" 
                        }
 
+GET /coupons         
+       output: returns coupons of the corresponding user as indicated in the useruuid field of 
+               jwt.
+              
+              format: { "status": "SUCCESS" OR "FAILURE"
+                        "message": "MESSAGE",
+                        "COUPONS": [ list of coupon objects ]         // available only if success
+                                                                      // in status
+                      }
+
 
 ----------------------------------VERIFICATION ROUTES ---------------------------------------
 route: /verification
