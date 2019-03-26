@@ -2,7 +2,12 @@ var Sequelize = require('sequelize');
 var db = require('../config/db');
 var uuid = require('uuid/v4');
 
-var sequelize = new Sequelize(db.url);
+var sequelize = new Sequelize(db.url, {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: true
+  }
+});
 
 var table = 'coupon';
 // setup User model and its fields.

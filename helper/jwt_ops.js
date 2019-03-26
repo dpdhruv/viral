@@ -3,12 +3,13 @@ var jwt_config = require('../config/jwt');
 const jwt = require('jsonwebtoken');
 const roles = require('../config/roles');
 
-module.exports.prepareJWTCookies = function (jwt, res, maxAge)  {
+module.exports.prepareJWTCookies = function (jwt, res, req,  maxAge)  {
     const first = jwt.split('.')[0] + '.' + jwt.split('.')[1];
     const second = jwt.split('.')[2];
     if(!maxAge) {
         maxAge = jwt_config.expiry * 1000;
     }
+    req.jwt = jwt;
     res.cookie('access-token-1', first, { maxAge: maxAge, httpOnly: false});
     res.cookie('access-token-2', second, { maxAge: maxAge, httpOnly: false});
 }
@@ -25,23 +26,19 @@ module.exports.getJwt = function(payload, time)   {
 }
 
 module.exports.jwtChecker = function (req, res, next)   {
-    if(!req.cookies["access-token-1"] || !req.cookies["access-token-2"])    {
+    if(!req.headers["access-token"])    {
         req.err = { status: 'failure', code: 103, 'message': 'No JWT found'};
         next();
         return;
     }
-    const j = req.cookies["access-token-1"] + "." + req.cookies["access-token-2"];
+    const j = req.headers["access-token"]
     jwt.verify(j, key, (err, decoded) => {
         if(err) {
-            res.clearCookie('access-token-1');
-            res.clearCookie('access-token-2');
             req.err = { status: 'failure', code: 100, message: 'jwt verification failed' }
         }
         else    {
             if(Date.now() >= decoded.exp)   {
                 req.decoded = decoded;
-                res.clearCookie('access-token-1');
-                res.clearCookie('access-token-2');
                 req.err = { status: 'failure', code: 101, message: 'jwt expired' }
             }
             else    {
@@ -54,6 +51,4 @@ module.exports.jwtChecker = function (req, res, next)   {
 
 
 module.exports.removeJWT = function(res)    {
-    res.clearCookie('access-token-1');
-    res.clearCookie('access-token-2');
 }

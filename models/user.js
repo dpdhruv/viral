@@ -1,23 +1,16 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt');
 var db = require('../config/db');
-var voucher_codes = require('voucher-code-generator');
+var randomize = require('randomatic');
 
-var sequelize = new Sequelize(db.url);
+var sequelize = new Sequelize(db.url, {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: true
+  }
+});
 var table = 'users';
 
-let referrel_code = [];
-function getReferralCode()  {
-    let code = referrel_code.pop();
-    if(!code)   {
-        referrel_code = voucher_codes.generate({
-            length: 7,
-            count: 1000,
-        })
-        return referrel_code.pop();
-    }
-    return code;
-}
 // setup User model and its fields.
 var User = sequelize.define(table, {
     username: {
@@ -37,8 +30,6 @@ var User = sequelize.define(table, {
     },
     referral_token: {
         type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: getReferralCode()
     },
     password: {
         type: Sequelize.STRING,
@@ -49,7 +40,7 @@ var User = sequelize.define(table, {
       beforeCreate: (user) => {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync(user.password, salt);
-        user.referral_token = getReferralCode();
+        user.referral_token = user.name.split(' ')[0] + '_' + randomize('Aa', 4) + randomize('0', 3);
       },
       beforeUpdate: (user) => {
         const salt = bcrypt.genSaltSync();

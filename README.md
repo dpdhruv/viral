@@ -20,53 +20,84 @@ Following are the list of endpoints supported.
 
 POST /login
 
-input:  username and password in x-www-urlencoded form
-output: json object indicating success or failure in authentication,
-        json web token divided in two cookies 
+input:  username and password in json format
+        format: { "username": USERNAME, "password", "PASSWORD" }
+output: json object indicating success or failure in authentication,   
+        format: { "jwt": "JWT TOKEN", "status": "SUCCESS OR FAILURE", "message": "MESSAGE" }
 
 POST /signup
 
-input:  username, password, phone_no, name in x-www-urlencoded form
-output: 
-    on success:
-        wraps encrypted user data in json web token and sends an otp to the phone_no of the user,
-        JSON object indicating the status
-    on failure:
-        json object indicating errors if any of the fields do not meet the requirements while insertion
-
-    
-GET /signup
-    input:  referral_code of the user in query parameter
-    output: wraps referrel_code and username of the corresponding user in JWT,
-            JSON object indicating the status
-
+input:  username, password, phone_no, name, otp and optional referral code in json object
+        format: { "username": "USERNAME",
+                  "password": "PASSWORD",
+                  "name": "NAME",
+                  "phone_no": "PHONE_NO",
+                  "referral_code": "REFERRAL CODE"              // optional field
+                  "otp": "OTP"
+                 }
+                  
+output: json object with status and message and jwt 
+        format: { 
+                  "jwt": "JWT TOKEN",
+                  "status": "SUCCESS OR FAILURE",
+                  "message": "MESSAGE" 
+                }
 
 
 POST /resetpassword
-    input: username in x-www-urlencoded form
+    input: username in json
+           format: { "username": "USERNAME" }
     output: JWT containing the username, 
             OTP is sent to the phone_no of the corresponding username for verification,
             JSON object indicating the status
+            format: { "jwt": "JWT",
+                      "otp": "OTP",
+                      "status": "SUCCESS OR FAILURE",
+                      "message": MESSAGE"
+                     }
+                     
+                     
+POST /getotp
+        input: json object containing the phone_no
+              format: { "phone_no": "PHONE NO" }
+              
+        output: checks if the valid number is provided, if yes then sends the otp to that number
+              format: { "otp": "OTP",
+                        "status": "SUCCESS OR FAILURE",
+                        "message": "MESSAGE" 
+                       }
 
 
 ----------------------------------VERIFICATION ROUTES ---------------------------------------
+route: /verification
 
-POST /verification/sms/:action
-    input: action indicating the action which will be invoked after successful verification of otp in the           url, 
-            otp in x-www-urlencoded form    if action is signup.
-            otp, new_password in x-www-urlencoded form if action is resetpassword
+POST /sms/:action
+    input: action indicating the action which will be invoked after successful verification of otp in the url, 
+           action--> resetpassword
+           format: { "otp": "OTP", "password": "NEW PASSWORD" }
+      
 
-    output: OTP is verified 
-            if action is signup, the user data sent along with JWT will be decrypted and new user with these fields will be created and the sms will be sent to him/her.
-            if the user is created with referral_code, the referrer will be sent the message informing that her referred person has signed up.
-
-            if action is resetpassword,
-            password of the user will be updated
+    output: if action is resetpassword and the otp matches with the one sent to the phone number of the user
+            the password of that user will be replaced with the new_password and the status message will be 
+            sent in the response
+            format: { "status": "SUCCESS OR FAILURE", "message": "MESSAGE" }
 
     
 
 ----------------------------------------ADMIN ROUTES ---------------------------------------------
 
+route: /admin
+
 POST /validation/redeem
-    input: coupon id and username in x-www-urlencoded form
-    ouput: JSON object indicating the status of the coupon
+    input: coupon id and username in json object
+           format: { "coupon: "COUPON ID", "user": "USERNAME" }
+    ouput: if coupon is valid and not used, the status of the coupon will be updated to used and appropriate response
+           will be sent
+           format: { "status": "SUCCESS OR FAILURE", "message": "MESSAGE", "action": "ACTION" }
+           
+GET /coupons
+    ouput: all the coupons available in the database will be returned in list of json objects
+    
+GET /coupons/:userid
+    output: all the coupons of the user indicated by the userid will be returned
+    
