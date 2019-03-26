@@ -16,6 +16,10 @@ module.exports.signup = async function (req, res) {
         name: req.body.name,
         phone_no: req.body.phone_no
     }
+    if(req.otp !== user.phone_no)   {
+        res.status(401).send({ status: 'failure', message: 'otp doesn\'t match with number'})
+        return
+    }
 
     let message = await check_user_details(user);
     if(message) {

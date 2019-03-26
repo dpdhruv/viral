@@ -5,6 +5,8 @@ const { getJwt, prepareJWTCookies, jwtChecker, removeJWT } = require('../helper/
 const { validJWT } = require('../controllers/jwt');
 var { encrypt, decrypt } = require('../helper/crypt');
 var User = require('../models/user');
+var User_coupon = require('../models/user_coupon')
+var Referral = require('../models/referral')
 var {  isValidPhoneNumber } = require('../helper/user');
 var roles = require('../config/roles');
 var { signup } = require('../helper/action');
@@ -66,6 +68,47 @@ module.exports = function(app)  {
         }
         });
     });
+
+    router.get('/coupons', jwtChecker, async (req, res) => {
+        if(req.err) {
+            res.status(401).send({ status: 'failure', message: 'Unauthorized'});
+        }  else if(!validJWT(roles.USER, req.decoded))  {
+            res.status({ status: 'failure', message: 'Invalid JWT'})
+        }  else {
+            let pairs = await User_coupon.findAll({ where: { user_id: req.decoded.useruuid }});
+            coupons = [];
+            for(let i = 0; i < pairs.length; i++)   {
+                let coupon = await Coupon.findOne({ where: { id: pairs[i].dataValues.coupon_id}})
+                coupons.push(coupon.dataValues);
+            }
+            res.send({ status: "success",  message: "", coupons: coupons});
+        }
+    })
+
+    router.get('/user', jwtChecker, async (req, res) => {
+        if(req.err) {
+            res.status(401).send({ status: 'failure', message: 'Unauthorized'});
+        }  else if(!validJWT(roles.USER, req.decoded))  {
+            res.status({ status: 'failure', message: 'Invalid JWT'})
+        }  else {
+            let user = await User.findOne({ where: { username: req.decoded.useruuid }});
+            user = (({ username, phone_no, name }) => ({ username, phone_no, name }))(user);
+            res.status(200).send({ status: 'success', message: 'user details', user: user})
+        }
+    })
+
+    router.get('/referred_users', jwtChecker, async (req, res) => {
+        if(req.err) {
+            res.status(401).send({ status: 'failure', message: 'Unauthorized'});
+        }  else if(!validJWT(roles.USER, req.decoded))  {
+            res.status({ status: 'failure', message: 'Invalid JWT'})
+        }  else {
+            let signup_users = await Referral.count({ where: { user_id: req.decoded.useruuid }})
+            let redeemed_users = await Referral.count({ where: { referred_to: req.decoded.useruuid, referral_status: 'expired'}})
+            res.send({ status: 'success', message: 'referred users count', users: { signup_users, redeemed_users }});            
+        } 
+    })
+
 
 
     router.post('/signup', async (req, res) => {

@@ -67,6 +67,35 @@ POST /getotp
                         "message": "MESSAGE" 
                        }
 
+GET /user
+       output: user details are sent
+              format: {
+                            "status": 'SUCCESS or FAILURE',
+                            "message": "",
+                            user :
+                            {
+                                   "username: "USERNAME",
+                                   "name": "NAME",
+                                   "phone_no": "PHONE_NO"
+                            }
+                      }
+
+GET /referred_users
+       output: counts of the signup users and redeemed users
+              format: {
+                            "status": 'SUCCESS or FAILURE',
+                            "message": "",
+                            "users": { "signup_users" : "COUNT", "redeemed_users": "COUNT"}
+                      }
+
+GET /coupons
+output: returns coupons of the corresponding user as indicated in the useruuid field of jwt
+          format: { "status": "SUCCESS" OR "FAILURE"
+                    "message": "MESSAGE",
+                    "COUPONS": [ list of coupon objects ]         // available only success
+                                                                  // in status
+                  }                      
+
 
 ----------------------------------VERIFICATION ROUTES ---------------------------------------
 route: /verification

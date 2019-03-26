@@ -6,7 +6,7 @@ var uuid = require('uuid/v4');
 var sequelize = new Sequelize(db.url, {
   dialect: 'postgres',
   dialectOptions: {
-    ssl: true
+    ssl: false
   }
 });
 const table = 'offer';

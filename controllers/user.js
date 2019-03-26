@@ -6,6 +6,7 @@ var logger = require('../config/winston');
 var Coupon = require('../models/coupon');
 var User_coupon = require('../models/user_coupon');
 var Reward = require('../models/reward');
+var roles = require('../config/roles')
 
 async function createUserWithReferral(req, res, user) {
     return await new Promise(async (resolve) => {
@@ -52,7 +53,7 @@ async function createUser(req, res, user)   {
             name: user.name,
             password: user.password,
         }).then(usr => {
-            const j = getJwt({ role: 'user', useruuid: usr.username });
+            const j = getJwt({ role: roles.USER, useruuid: usr.username });
             prepareJWTCookies(j, res, req);
             logger.info(`New User created: ${user}`);
             sendSMS('Thank you for Signing up', usr.phone_no);
