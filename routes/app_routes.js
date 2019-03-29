@@ -92,7 +92,7 @@ module.exports = function(app)  {
             res.status({ status: 'failure', message: 'Invalid JWT'})
         }  else {
             let user = await User.findOne({ where: { username: req.decoded.useruuid }});
-            user = (({ username, phone_no, name }) => ({ username, phone_no, name }))(user);
+            user = (({ username, phone_no, name, referral_token }) => ({ username, phone_no, name, referral_token }))(user);
             res.status(200).send({ status: 'success', message: 'user details', user: user})
         }
     })
