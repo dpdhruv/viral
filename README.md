@@ -94,7 +94,15 @@ output: returns coupons of the corresponding user as indicated in the useruuid f
                     "message": "MESSAGE",
                     "COUPONS": [ list of coupon objects ]         // available only success
                                                                   // in status
-                  }                      
+                  }             
+                  
+                  
+GET /username/:USERNAME
+        output: returns status if the username is available
+                format: {
+                                status: 'SUCCESS OR FAILURE'
+                                message: 'username is available' OR 'username exists'
+                        }
 
 
 ----------------------------------VERIFICATION ROUTES ---------------------------------------
