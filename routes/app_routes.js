@@ -7,7 +7,7 @@ var { encrypt, decrypt } = require('../helper/crypt');
 var User = require('../models/user');
 var User_coupon = require('../models/user_coupon')
 var Referral = require('../models/referral')
-var {  isValidPhoneNumber } = require('../helper/user');
+var {  isValidPhoneNumber, exists_username } = require('../helper/user');
 var roles = require('../config/roles');
 var { signup } = require('../helper/action');
 var { getOtp, getOtpMap } = require('../controllers/otp_ops');
@@ -94,6 +94,15 @@ module.exports = function(app)  {
             let user = await User.findOne({ where: { username: req.decoded.useruuid }});
             user = (({ username, phone_no, name, referral_token }) => ({ username, phone_no, name, referral_token }))(user);
             res.status(200).send({ status: 'success', message: 'user details', user: user})
+        }
+    })
+
+    router.get('/username/:username', async (req, res) => {
+        let count = await exists_username(req.params.username)
+        if(count == 0)  {
+            res.send({ status: 'success', username: 'username is available'})
+        }   else    {
+            res.send({ status: 'success', message: 'username exists'})
         }
     })
 

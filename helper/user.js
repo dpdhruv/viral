@@ -24,6 +24,16 @@ module.exports.check_user_details = async (user) => {
     return message == '' ? undefined : message;
 }
 
+
+async function exists_username(username)    {
+    let count = await User.count({ where: {username: username}});
+    if(count == 0)  {
+        return 0
+    }   else    {
+        return 1;
+    }
+}
+
 async function verify_duplication(user)   {
     let message = '';
     const list = await User.findAll({ where: { [Op.or]:  [ {username: user.username}, {phone_no: user.phone_no} ]}});
@@ -77,3 +87,4 @@ function isValidName(name) {
 
 module.exports.isValidPhoneNumber = isValidPhoneNumber;
 module.exports.isValidPassword = isValidPassword;
+module.exports.exists_username = exists_username
