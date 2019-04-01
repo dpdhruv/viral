@@ -34,7 +34,7 @@ async function createUserWithReferral(req, res, user) {
                         referrer_id: usr.username,
                         coupon_id: coupon.dataValues.id
                     })
-                    referrer.update({ referral_status: 'expired'});
+//                    referrer.update({ referral_status: 'expired'});
                 }
                 resolve({ code: 200, body: { jwt: req.jwt , status: 'success', message: 'New User Created with referrel'}});
             }).catch(err => {

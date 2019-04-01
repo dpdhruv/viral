@@ -32,7 +32,7 @@ module.exports.signup = async function (req, res) {
                 res.status(412).send({ status: 'failure', message: 'Invalid referral code'});
             }   else    {
                 user.referral_code = req.body.referral_code;
-                user.referrer = usr.username;
+                user.referrer = (await User.findOne({ where: { referral_token: req.body.referral_code }})).dataValues.username
                 const response = await createUserWithReferral(req, res, user);
                 res.status(response.code).send(response.body);           
             }
