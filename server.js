@@ -15,7 +15,20 @@ app.use(express.json());
 // set morgan to log info about our requests for development use.
 app.use(morgan('dev', { stream: logger.stream }));
 app.use(cookieParser());
-app.use(cors());
+app.all('*', (req, res, next) => {
+	// CORS headers
+	res.header(
+		'Access-Control-Allow-Origin',
+		security.getAccessControlAllowOrigin()
+	);
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+	res.header('Access-Control-Allow-Credentials', 'true');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Key, Authorization'
+	);
+	next();
+});
 app.set('port', 8080);
 var router = require('./routes/app_routes')(app);
 var admin_router = require('./routes/admin_route')(app);
