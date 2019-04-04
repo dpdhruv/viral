@@ -29,6 +29,7 @@ app.all('*', (req, res, next) => {
 	);
 	next();
 });
+app.use(cors())
 app.set('port', 8080);
 var router = require('./routes/app_routes')(app);
 var admin_router = require('./routes/admin_route')(app);
