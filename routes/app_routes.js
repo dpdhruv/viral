@@ -6,6 +6,7 @@ const { validJWT } = require('../controllers/jwt');
 var { encrypt, decrypt } = require('../helper/crypt');
 var User = require('../models/user');
 var User_coupon = require('../models/user_coupon')
+var Coupon = require('../models/coupon')
 var Referral = require('../models/referral')
 var {  isValidPhoneNumber, exists_username } = require('../helper/user');
 var roles = require('../config/roles');
@@ -79,7 +80,10 @@ module.exports = function(app)  {
             coupons = [];
             for(let i = 0; i < pairs.length; i++)   {
                 let coupon = await Coupon.findOne({ where: { id: pairs[i].dataValues.coupon_id}})
-                coupons.push(coupon.dataValues);
+                let { code, coupon_value, coupon_message, status } = coupon.dataValues
+                let object = {}
+                Object.assign(object, { code, coupon_value, coupon_message, status })
+                coupons.push(object)
             }
             res.send({ status: "success",  message: "", coupons: coupons});
         }
@@ -140,7 +144,7 @@ module.exports = function(app)  {
                 prepareJWTCookies(getJwt({ role: roles.PASSWORD_RESET, user: { username: user.username, phone_no: encrypt(user.phone_no) }}, 10*60*1000), res, req, 10*60*1000);
                 let otp = getOtp(user.phone_no, res);
                 if(otp) {
-                    sendSMS(`${otp} is your one time password for Sign up in viral`, req.body.phone_no);
+                    sendSMS(`${otp} is your onecoupons time password for Sign up in viral`, req.body.phone_no);
                     logger.info(`OTP for reset password: ${otp} <----> ${user.phone_no}`);
                     res.status(200).send({ jwt: req.jwt, status: 'success', message: 'otp has been sent for verification', otp: otp});
                 }
