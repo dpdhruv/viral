@@ -137,4 +137,63 @@ GET /coupons
     
 GET /coupons/:userid
     output: all the coupons of the user indicated by the userid will be returned
+
+------------
+social_share vector
+0 FACEBOOK
+1 LINKEDIN
+2 TWITTER
+3 INSTAGRAM
+4 PINTEREST
+5 MESSANGER
+6 WHATSAPP
+
+Following Routes support 
+GET and POST methods.
+
+GET method retrieves the value of the settings and 
+POST method put the value of the settings
+
+/settings/business
+
+/settings/website
     
+/settings/name
+    
+/settings/tag
+    
+/settings/email
+    
+/settings/phone_no
+
+/settings/image
+    
+/settings/primary_colour
+    
+/settings/secondary_colour
+    
+/settings/theme_id
+    
+/settings/facebook_message
+    
+/settings/linkedin_message
+    
+/settings/twitter_message
+    
+/settings/instagram_message
+    
+/settings/pinterest_message
+    
+/settings/messanger_message
+    
+/settings/whatsapp_message    
+    
+----------------
+
+POST /settings/social_share/enable
+       input: list of the media to be enabled
+       output: social_share settings which is a list of boolean values
+
+POST /settings/social_share/disable
+       input: list of the media to be disabled
+       ouput: social_share settings which is a list of boolean values

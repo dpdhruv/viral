@@ -1,6 +1,5 @@
 var Sequelize = require('sequelize');
 var db = require('../config/db');
-var uuid = require('uuid/v4');
 
 var sequelize = new Sequelize(db.url, {
   dialect: 'postgres',
@@ -18,24 +17,52 @@ var Coupon = sequelize.define(table, {
         allowNull: false,
         defaultValue: Sequelize.UUIDV4
     },
-    code: {
+    name: {
         type: Sequelize.STRING,
-        allowNull: false
     },
-    coupon_value: {
+    value: {
         type: Sequelize.STRING,
-        allowNull: false
     },
-    coupon_message: {
+    message: {
         type: Sequelize.STRING,
-        allowNull: false
     },
-    status: {
-        type: Sequelize.ENUM,
-        values: ['active', 'expired'],
-        defaultValue: 'active',
-        allowNull: false
-    }}, {
+    logo: {
+        type: Sequelize.STRING
+    },
+    background_image:   {
+        type: Sequelize.STRING
+    },
+    theme_id:   {
+        type: Sequelize.UUID
+    },
+    primary_colour: {
+        type: Sequelize.STRING
+    },
+    secondary_colour:   {
+        type: Sequelize.STRING
+    },
+    available_on:   {
+        type: Sequelize.ARRAY(Sequelize.BOOLEAN)
+    },
+    available_to:   {
+        type: Sequelize.ARRAY(Sequelize.BOOLEAN) 
+    },
+    available_at:   {
+        type: Sequelize.INTEGER
+    },
+    campaign_id:    {
+        type: Sequelize.INTEGER
+    },
+    send_media: {
+        type: Sequelize.ARRAY(Sequelize.BOOLEAN)
+    },
+    email_message:  {
+        type: Sequelize.STRING
+    },
+    mobile_message: {
+        type: Sequelize.STRING
+    }
+    }, {
     hooks: {
     },
 });

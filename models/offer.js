@@ -1,12 +1,11 @@
 var Sequelize = require('sequelize');
 var db = require('../config/db');
-var uuid = require('uuid/v4');
 
 // create a sequelize instance with our local postgres database information.
 var sequelize = new Sequelize(db.url, {
   dialect: 'postgres',
   dialectOptions: {
-    ssl: false
+    ssl: true
   }
 });
 const table = 'offer';
