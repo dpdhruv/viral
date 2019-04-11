@@ -22,20 +22,22 @@ var attributes =
 
 for(let i=0; i < attributes.length; i++)    {
     // console.log(`router.get('/settings/${attributes[i]}',async (req, res, next) => {
-    //     Settings.findOne({}).then(s => {
-    //         res.send(s.${attributes[i]})
-    //     }).catch(next)
-    // });`
-    // console.log(`router.post('/settings/${attributes[i]}',async (req, res, next) => {
-    //     Settings.findOne({}).then(s => {
-    //         s.${attributes[i]} = req.body.${attributes[i]}
-    //         s.save()
-    //     })
-    // });`)
-    console.log(`/settings/${attributes[i]}
-    `)
-    //console.log('')
+//     //     Settings.findOne({}).then(s => {
+//     //         res.send(s.${attributes[i]})
+//     //     }).catch(next)
+//     // });`
+    console.log(`router.post('/settings/${attributes[i]}',async (req, res, next) => {
+        Settings.findOne({}).then(s => {
+            s.${attributes[i]} = req.body.${attributes[i]}
+            s.save()
+            res.send({ ${attributes[i]}: s.${attributes[i]} })
+        })
+    });`)
+//     console.log(`/settings/${attributes[i]}
+//     `)
+console.log('')
 }
+
 
 
 

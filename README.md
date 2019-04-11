@@ -152,7 +152,11 @@ Following Routes support
 GET and POST methods.
 
 GET method retrieves the value of the settings and 
+
 POST method put the value of the settings
+       json body format: { 
+                            NAME_OF_THE_FIELD: VALUE
+                     }
 
 /settings/business
 

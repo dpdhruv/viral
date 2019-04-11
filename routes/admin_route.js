@@ -166,17 +166,19 @@ module.exports = function(app)  {
             }).catch(next)
         });
 
-    router.post('/settings/business',async (req, res, next) => {
-        Settings.findOne({}).then(s => {
-            s.business = req.body.business
-            s.save()
-        })
-    });
+        router.post('/settings/business',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.business = req.body.business
+                s.save()
+                res.send({ business: s.business })
+            })
+        });
     
     router.post('/settings/website',async (req, res, next) => {
             Settings.findOne({}).then(s => {
                 s.website = req.body.website
                 s.save()
+                res.send({ website: s.website })
             })
         });
     
@@ -184,6 +186,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.name = req.body.name
                 s.save()
+                res.send({ name: s.name })
             })
         });
     
@@ -191,6 +194,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.tag = req.body.tag
                 s.save()
+                res.send({ tag: s.tag })
             })
         });
     
@@ -198,6 +202,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.email = req.body.email
                 s.save()
+                res.send({ email: s.email })
             })
         });
     
@@ -205,6 +210,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.phone_no = req.body.phone_no
                 s.save()
+                res.send({ phone_no: s.phone_no })
             })
         });
     
@@ -212,6 +218,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.image = req.body.image
                 s.save()
+                res.send({ image: s.image })
             })
         });
     
@@ -219,6 +226,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.primary_colour = req.body.primary_colour
                 s.save()
+                res.send({ primary_colour: s.primary_colour })
             })
         });
     
@@ -226,6 +234,7 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.secondary_colour = req.body.secondary_colour
                 s.save()
+                res.send({ secondary_colour: s.secondary_colour })
             })
         });
     
@@ -233,8 +242,74 @@ module.exports = function(app)  {
             Settings.findOne({}).then(s => {
                 s.theme_id = req.body.theme_id
                 s.save()
+                res.send({ theme_id: s.theme_id })
             })
         });
+    
+    router.post('/settings/social_share',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.social_share = req.body.social_share
+                s.save()
+                res.send({ social_share: s.social_share })
+            })
+        });
+    
+    router.post('/settings/facebook_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.facebook_message = req.body.facebook_message
+                s.save()
+                res.send({ facebook_message: s.facebook_message })
+            })
+        });
+    
+    router.post('/settings/linkedin_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.linkedin_message = req.body.linkedin_message
+                s.save()
+                res.send({ linkedin_message: s.linkedin_message })
+            })
+        });
+    
+    router.post('/settings/twitter_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.twitter_message = req.body.twitter_message
+                s.save()
+                res.send({ twitter_message: s.twitter_message })
+            })
+        });
+    
+    router.post('/settings/instagram_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.instagram_message = req.body.instagram_message
+                s.save()
+                res.send({ instagram_message: s.instagram_message })
+            })
+        });
+    
+    router.post('/settings/pinterest_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.pinterest_message = req.body.pinterest_message
+                s.save()
+                res.send({ pinterest_message: s.pinterest_message })
+            })
+        });
+    
+    router.post('/settings/messanger_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.messanger_message = req.body.messanger_message
+                s.save()
+                res.send({ messanger_message: s.messanger_message })
+            })
+        });
+    
+    router.post('/settings/whatsapp_message',async (req, res, next) => {
+            Settings.findOne({}).then(s => {
+                s.whatsapp_message = req.body.whatsapp_message
+                s.save()
+                res.send({ whatsapp_message: s.whatsapp_message })
+            })
+        });
+    
     
     router.post('/settings/social_share/:action',async (req, res, next) => {
         const action = req.params.action
@@ -257,55 +332,6 @@ module.exports = function(app)  {
             })
         });
     
-    router.post('/settings/facebook_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.facebook_message = req.body.facebook_message
-                s.save()
-            })
-        });
-    
-    router.post('/settings/linkedin_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.linkedin_message = req.body.linkedin_message
-                s.save()
-            })
-        });
-    
-    router.post('/settings/twitter_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.twitter_message = req.body.twitter_message
-                s.save()
-            })
-        });
-    
-    router.post('/settings/instagram_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.instagram_message = req.body.instagram_message
-                s.save()
-            })
-        });
-    
-    router.post('/settings/pinterest_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.pinterest_message = req.body.pinterest_message
-                s.save()
-            })
-        });
-    
-    router.post('/settings/messanger_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.messanger_message = req.body.messanger_message
-                s.save()
-            })
-        });
-    
-    router.post('/settings/whatsapp_message',async (req, res, next) => {
-            Settings.findOne({}).then(s => {
-                s.whatsapp_message = req.body.whatsapp_message
-                s.save()
-            })
-        });
-
 
     router.post('/settings/coupons', async (req, res, next) => {
         let coupon = req.body
